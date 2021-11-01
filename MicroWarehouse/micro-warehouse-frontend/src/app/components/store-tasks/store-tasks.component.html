@@ -1,0 +1,31 @@
+<div class="container">
+
+    <div class="row d-flex justify-content-center my-2">
+        <div class="col d-flex justify-content-center">
+            <h2 class="text-center display-6">Warehouse Palettes:</h2>
+        </div>
+    </div>
+
+    <div class="row my-2 d-flex justify-content-center" *ngFor="let pal of palettes">
+
+        <div class="col-4 d-flex justify-content-center">
+            <label>{{pal.amount}} </label>
+        </div>
+
+        <div class="col-4 d-flex justify-content-center">
+            <label>{{pal.product}} </label>
+        </div>
+
+        <div class="col-4 d-flex justify-content-center">
+            <label>{{pal.location}} </label>
+        </div>
+
+    </div>
+
+    <div class="row my-2">
+        <div class="col d-flex justify-content-center">
+            <a class="btn btn-primary" href="store-tasks/add-palette">Add new palette</a>
+        </div>
+    </div>
+
+</div>

@@ -1,0 +1,17 @@
+.container {
+    background-color: lightgray;
+}
+
+.b1 {
+    background-color: rgb(71, 71, 71);
+    color: white;             //Schriftfarbe
+    padding: 10px 16px;         //Groesse
+    border-radius: 12px;        //Stärke der runden Ecken
+    //border: none;             //to get rid of the border
+   
+    padding: 5px 15px;          //x y, while x is space to top and bottom, y is space to left and right side
+    text-decoration: none;      //use underline, overline etc. to change text layout
+    font-size: 16px;
+    margin: 0,5px;              //space to top and bottom
+    cursor: default;            //default = Maus, pointer = Zeigerfinger, none, cf. https://developer.mozilla.org/de/docs/Web/CSS/cursor
+}

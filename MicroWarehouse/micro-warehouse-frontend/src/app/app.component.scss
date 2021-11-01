@@ -1,0 +1,16 @@
+body {
+    background-color: lightgray;
+}
+
+h1 {
+    color: rgb(59, 59, 59);
+    background-color: rgb(172, 172, 172);
+}
+
+
+.row {
+    margin: 0;      //thickness of the margin area = Randabstand
+    padding: 5px;   //thickness of the padding area = Füllung
+    background-color: rgb(172, 172, 172);
+    //border: 1px solid black;
+  }
