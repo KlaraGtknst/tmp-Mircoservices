@@ -1,3 +1,4 @@
+import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 
 @Component({
@@ -7,24 +8,24 @@ import { Component, OnInit } from '@angular/core';
 })
 export class StoreTasksComponent implements OnInit {
 
-  constructor() { }
-  public palettes = [
-    {
-      barcode: "b001",
-      product: "red shoes",
-      amount: 10,
-      location: "shelf 42"
-    },
-    {
-      barcode: "b002",
-      product: "red shoes",
-      amount: 10,
-      location: "shelf 43"
-    },
-  ]
+  constructor(private http: HttpClient) { }
 
-  storeTaskString = "Initiale Message"
-  ngOnInit(): void {
+  public palettes : any[] = [ ];
+
+  storeTaskString = "Initiale Message";
+
+  response : any = {};
+
+  async ngOnInit() {
+    this.response = await this.http
+      .get<any>('http://localhost:3000/query/palettes')
+      .toPromise();
+    console.log('there is some data')
+    for (const event of this.response.result) {
+      this.palettes.push(event.payload);
+    }
+    //this.storeTaskString = JSON.stringify(this.response, null, 3)
+    console.log(this.storeTaskString)
   }
 
 }

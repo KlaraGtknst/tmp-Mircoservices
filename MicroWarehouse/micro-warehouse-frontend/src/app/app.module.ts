@@ -8,11 +8,12 @@ import { StoreTasksModule } from './components/store-tasks/store-tasks.module';
 import { AddPaletteComponent } from './components/add-palette/add-palette.component';
 import { AddPaletteModule } from './components/add-palette/add-palette.module';
 import { FormsModule } from '@angular/forms';
+import { HttpClientModule } from '@angular/common/http';
 
 @NgModule({
   declarations: [
     AppComponent,
-    AddPaletteComponent
+    AddPaletteComponent,
   ],
   imports: [
     BrowserModule,
@@ -20,7 +21,8 @@ import { FormsModule } from '@angular/forms';
     AppRoutingModule,
     HomeModule,
     StoreTasksModule,
-    AddPaletteModule
+    AddPaletteModule,
+    HttpClientModule
   ],
   providers: [],
   bootstrap: [AppComponent]

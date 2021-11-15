@@ -1,4 +1,7 @@
+import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
+import {Router} from '@angular/router'
+
 
 @Component({
   selector: 'app-add-palette',
@@ -7,17 +10,17 @@ import { Component, OnInit } from '@angular/core';
 })
 export class AddPaletteComponent implements OnInit {
 
-  constructor() { }
+  constructor(private http: HttpClient, private router: Router) { }
 
   barcode = ''
   product = ''
   amount = ''
-  location = ''  
+  location = ''
 
   ngOnInit(): void {
   }
 
-  addPalette() {
+  async addPalette() {
 
     const newPalette = {
       barcode: this.barcode,
@@ -26,8 +29,19 @@ export class AddPaletteComponent implements OnInit {
       location: this.location
     }
 
-    console.log(JSON.stringify(newPalette, null, 3))
+    const newCmd = {
+      opCode: 'storePalette',
+      parameters: newPalette,
+    }
+
+    try {
+      const response = await this.http.post<any>('http://localhost:3000/cmd', newCmd).toPromise();
+      console.log(`post has been send ${JSON.stringify(response, null, 3)}`);
+      this.router.navigate(['/store-tasks']);
+    } catch(error) {
+      console.log('post error');
+    }
 
   }
-  
+
 }

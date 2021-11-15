@@ -1,39 +1,27 @@
 import { Injectable } from '@nestjs/common';
+import { BuilderService } from './modules/builder/builder.service';
+import Command from './modules/builder/command';
 
 @Injectable()
 export class AppService {
-  getQuery(key: string): any {
+  constructor(private readonly modelBuilderService: BuilderService) {}
+
+  async getQuery(key: string): Promise<any> {
+    const list = await this.modelBuilderService.getByTag(key);
     const answer = {
       key: key,
-      result: [
-        {
-          blockId: 'pal001',
-          time: '12:00:00',
-          eventType: 'PaletteStored',
-          tags: ['palettes', 'red shoes'],
-          payload: {
-            barcode: 'pal001',
-            product: 'red shoes',
-            amount: 10,
-            location: 'shelf 42',
-          },
-        },
-        {
-          blockId: 'pal002',
-          time: '12:01:00',
-          eventType: 'PaletteStored',
-          tags: ['palettes', 'red shoes'],
-          payload: {
-            barcode: 'pal002',
-            product: 'red shoes',
-            amount: 10,
-            location: 'shelf 43',
-          },
-        },
-      ],
+      result: list,
     };
     return answer;
-    //return `the query is ${key}`;
+  }
+
+  handleCommand(command: Command) {
+    if (command.opCode === 'storePalette') {
+      this.modelBuilderService.storePalette(command.parameters);
+      return command;
+    } else {
+      return `cannot handle ${command.opCode}`;
+    }
   }
 
   getHello(): string {

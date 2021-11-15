@@ -4,7 +4,7 @@ import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 
 @Schema()
 export class BuildEvent {
-  @Prop({ required: true })
+  @Prop({ required: true}) //, trim: true }) //Eingaben von ungewollten Spaces befreien
   eventType: string;
 
   @Prop({ required: true })
