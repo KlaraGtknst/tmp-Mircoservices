@@ -35,9 +35,12 @@ export class AddPaletteComponent implements OnInit {
     }
 
     try {
-      const response = await this.http.post<any>('http://localhost:3000/cmd', newCmd).toPromise();
+      this.http.post<any>('http://localhost:3000/cmd', newCmd).subscribe(
+        () => {this.router.navigate(['/store-tasks']);}
+      )
+      /*const response = await this.http.post<any>('http://localhost:3000/cmd', newCmd).toPromise();
       console.log(`post has been send ${JSON.stringify(response, null, 3)}`);
-      this.router.navigate(['/store-tasks']);
+      this.router.navigate(['/store-tasks']);*/
     } catch(error) {
       console.log('post error');
     }
