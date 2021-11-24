@@ -14,8 +14,6 @@ export class StoreTasksComponent implements OnInit {
 
   storeTaskString = "Initiale Message";
 
-  answer : any = {};
-
   async ngOnInit(){
     this.http.get<any>('http://localhost:3000/query/palettes')
       .subscribe(
