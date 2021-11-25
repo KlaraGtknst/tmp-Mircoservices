@@ -17,8 +17,8 @@ export class StoreTasksComponent implements OnInit {
   async ngOnInit(){
     this.http.get<any>('http://localhost:3000/query/palettes')
       .subscribe(
-        answer => this.handleQueryResponse(answer),
-        error => this.storeTaskString = JSON.stringify(error, null, 3)
+        answer => {this.handleQueryResponse(answer)},
+        error => {this.storeTaskString = JSON.stringify(error, null, 3)}
       );
   }
 
