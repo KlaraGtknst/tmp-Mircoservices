@@ -1,24 +1,40 @@
 /* eslint-disable prettier/prettier */
-import { Injectable } from '@nestjs/common';
+import { Injectable, OnModuleInit } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { BuildEvent } from './build-event.schema';
+import { MSProduct } from './product.schema';
 
 @Injectable()
-export class BuilderService {
+export class BuilderService implements OnModuleInit {
 
     constructor(
         @InjectModel('eventStore') private buildEventModel: Model<BuildEvent>,
-        @InjectModel('products') private productsModel: Model<BuildEvent>,
+        @InjectModel('products') private productsModel: Model<MSProduct>,
       ) {}
+
+    async onModuleInit() {
+        await this.reset();
+    }
 
     async clear() {
         await this.productsModel.deleteMany();
-        return await this.buildEventModel.deleteMany();
+        await this.buildEventModel.deleteMany();
     }
 
     async reset() {
         await this.clear();
+        await this.handleProductStored( {
+            blockId: 'rubber_boots',
+            time: '11:00:00',
+            eventType: 'ProductStored',
+            tags: ['product', 'rubber_boots'],
+            payload: {
+                product: 'rubber_boots',
+                amount: 23,
+                location: 'entry_door',
+            }
+        });
         await this.handleProductStored( {
             blockId: 'rubber_boots',
             time: '11:00:00',

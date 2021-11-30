@@ -18,8 +18,8 @@ describe('The Shop Backend Test', () => {
         amount: 10,
       }
     })
-    .then((respone) => {
-      const product = respone.body;
+    .then((response) => {
+      const product = response.body;
       expect(product).have.property('product', 'black_socks')
       expect(product).have.property('amount', 10);
     })
@@ -36,12 +36,12 @@ describe('The Shop Backend Test', () => {
         amount: 10,
       }
     })
-    .then((respone) => {
-      const product = respone.body;
+    .then((response) => {
+      const product = response.body;
       expect(product).have.property('product', 'black_socks')
-      expect(product).have.property('amount', 10);
+      expect(product).have.property('amount', 10);  //for version without dublicate check: 20);
+      })
     })
-  })
 
 
   it('sends an update with another 20 socks', () => {
@@ -55,8 +55,8 @@ describe('The Shop Backend Test', () => {
         amount: 20,
       }
     })
-    .then((respone) => {
-      const product = respone.body;
+    .then((response) => {
+      const product = response.body;
       expect(product).have.property('product', 'black_socks')
       expect(product).have.property('amount', 30);
     })
