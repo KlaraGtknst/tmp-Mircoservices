@@ -15,6 +15,15 @@ export class AppService {
     return 'The shop database is clear.';
   }
 
+  async getEvent(event: string) {
+    const list = await this.modelBuilderService.getByTag(event);
+    const answer = {
+      event: event,
+      result: list,
+    };
+    return answer;
+  }
+
   async handleEvent(event: BuildEvent) {
     if (event.eventType === 'productStored') {
       return await this.modelBuilderService.handleProductStored(event);

@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Post } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post } from '@nestjs/common';
 import { AppService } from './app.service';
 import { BuildEvent } from './modules/builder/build-event.schema';
 
@@ -14,6 +14,11 @@ export class AppController {
   @Get('reset')
   async getReset() {
     return await this.appService.getReset();
+  }
+
+  @Get('event')
+  async getEvent(@Param('product') product: string): Promise<any> {
+    return await this.appService.getEvent(product);
   }
 
   @Post('event')

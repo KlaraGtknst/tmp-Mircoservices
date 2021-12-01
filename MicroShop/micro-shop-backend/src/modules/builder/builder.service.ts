@@ -48,6 +48,12 @@ export class BuilderService implements OnModuleInit {
         });
     }
 
+    async getByTag(tag: string) {
+        console.log('getByTag called with ' + tag);
+        const list = await this.productsModel.find({ tags: tag }).exec();
+        return list;
+    }
+
     async handleProductStored(event: BuildEvent) {
         //start transaction
         const session = await this.buildEventModel.startSession();
