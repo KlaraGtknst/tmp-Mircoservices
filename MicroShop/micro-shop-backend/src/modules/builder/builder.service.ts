@@ -4,6 +4,8 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { BuildEvent } from './build-event.schema';
 import { MSProduct } from './product.schema';
+import { Order } from './order.schema';
+import { Customer } from './customer.schema';
 
 @Injectable()
 export class BuilderService implements OnModuleInit {
@@ -11,6 +13,8 @@ export class BuilderService implements OnModuleInit {
     constructor(
         @InjectModel('eventStore') private buildEventModel: Model<BuildEvent>,
         @InjectModel('products') private productsModel: Model<MSProduct>,
+        @InjectModel('orders') private ordersModel: Model<Order>,
+        @InjectModel('customers') private customersModel: Model<Customer>
       ) {}
 
     async onModuleInit() {
@@ -20,11 +24,13 @@ export class BuilderService implements OnModuleInit {
     async clear() {
         await this.productsModel.deleteMany();
         await this.buildEventModel.deleteMany();
+        await this.ordersModel.deleteMany();
+        await this.customersModel.deleteMany();
     }
 
     async reset() {
         await this.clear();
-        await this.handleProductStored( {
+        /*await this.handleProductStored( {
             blockId: 'rubber_boots',
             time: '11:00:00',
             eventType: 'ProductStored',
@@ -45,7 +51,7 @@ export class BuilderService implements OnModuleInit {
                 amount: 23,
                 location: 'entry_door',
             }
-        });
+        });*/
     }
 
     async getByTag(tag: string) {
@@ -55,66 +61,128 @@ export class BuilderService implements OnModuleInit {
     }
 
     async handleProductStored(event: BuildEvent) {
-        //start transaction
-        const session = await this.buildEventModel.startSession();
+
         let newProduct = null;
-        await session.withTransaction(async () => {
-            //store a build event
-            const storeSuccess = await this.storeEvent(event);
 
-            if(storeSuccess) {
-                //store a product object 
-                const productPatch = {
-                    product: event.blockId,
-                    amount: event.payload.amount,
-                    amountTime: event.time,
-                }
-                newProduct = await this.storeProduct(productPatch);
-            }
-            else {
-                newProduct = await this.productsModel.findOne({product: event.blockId});
-            }
-        })
+        // store a build event
+        const storeSuccess = await this.storeEvent(event);
 
-        session.endSession();
+        if(storeSuccess) {
+            // store a product object
+            const productPatch = {
+                product: event.blockId,
+                amount: event.payload.amount,
+                amountTime: event.time,
+            }
+            newProduct = await this.storeProduct(productPatch)
+        } else {
+            newProduct = await this.productsModel.findOne({product: event.blockId});
+        }
+
         return newProduct;
     }
 
-    async storeEvent(event: BuildEvent) {
-        let previousEvent = await this.buildEventModel.findOne({blockId: event.blockId}).exec();
-
-        if(previousEvent == null) {
-            previousEvent = await this.buildEventModel.create(event);
-            console.log('BuilderService.storeEvent create: \n' + JSON.stringify(previousEvent, null, 3));
-            return true;
-        }
-        else if (previousEvent.time < event.time) {
-            previousEvent = await this.buildEventModel.findOneAndUpdate(
-                {blockId: event.blockId},
-                event,
-                {new: true}).exec();
-            console.log('BuilderService.storeEvent update: \n' + JSON.stringify(previousEvent, null, 3));
-            return true;
-        }
-        return false;
-    }
-
-    async storeProduct(product: any) {
+    async storeProduct(newProductData: any) {
         try {
             const newProduct = await this.productsModel.findOneAndUpdate(
-                {product: product.product},
+                {product: newProductData.product},
                 {
-                    $inc: {amount: product.amount},
-                    $set: {amountTime: product.amountTime}
+                    $inc: {amount: newProductData.amount},
+                    $set: {
+                        amountTime: newProductData.amountTime,
+                        product: newProductData.product,
+
+                    }
                 },
                 {upsert: true, new: true}).exec();
-                console.log('BuilderService.storeProduct findOneAndUpdate: \n' + JSON.stringify(newProduct, null, 3));
-            return newProduct
-        } catch (error) {
+            console.log('BuilderService.storeProduct storeProduct: \n' + JSON.stringify(newProduct, null, 3));
+            return newProduct;
+        } catch(error) {
             console.log('Error in BuilderService.storeProduct: \n' + JSON.stringify(error, null, 3));
         }
-        
     }
+
+    async storeEvent(event: BuildEvent) {
+            const placeholder = await this.buildEventModel.findOneAndUpdate(
+                { blockId: event.blockId},
+                { blockId: event.blockId, $setOnInsert: {time: ''}},
+                { upsert: true, new: true}
+            ).exec();
+            // console.log('builder service storeEvent line 56\n' + JSON.stringify(placeholder, null, 3));
+
+            const newEvent = await this.buildEventModel.findOneAndUpdate(
+                { blockId: event.blockId, time: {$lt: event.time}},
+                event,
+                { new: true}
+            ).exec();
+            console.log('builder service storeEvent line 62\n' + JSON.stringify(newEvent, null, 3));
+
+            return newEvent != null;
+    }
+        
+
+
+    async handleAddOffer(event: BuildEvent) {
+        let newProduct = null;
+        const storeSuccess = await this.storeEvent(event);
+ 
+        if(storeSuccess) {
+            //store a product object 
+            const productPatch = {
+                product: event.payload.product,
+                price: event.payload.price,
+            }
+
+            try {
+                newProduct = await this.productsModel.findOneAndUpdate(
+                    { product: productPatch.product},
+                    productPatch,
+                    { upsert: true, new: true}).exec();
+                return newProduct;
+            } catch (error) {
+                console.log('Error in BuilderService.storeProduct \n' + JSON.stringify(error, null, 3))
+            }
+        } else {
+            return await this.productsModel.findOne({product: event.payload.product});
+        }
+    }
+
+    async handlePlaceOrder(event: BuildEvent) {
+        let newOrder = null;
+        const storeSuccess = await this.storeEvent(event);
+ 
+        if(storeSuccess) {
+            //store a product object 
+
+            try {
+                //upsert order
+                newOrder = await this.ordersModel.findOneAndUpdate(
+                    { code: event.payload.code},
+                    event.payload,
+                    { upsert: true, new: true}).exec()
+                
+                //upsert customer
+                await this.customersModel.findOneAndUpdate(
+                    {name: event.payload.customer},
+                    {
+                        name: event.payload.customer,
+                        lastAddress: event.payload.address,
+                    },
+                    {upsert: true, new: true}
+                ).exec()
+
+                return newOrder
+            } catch (error) {
+                console.log('Error in BuilderService.handlePlaceOrder \n' + JSON.stringify(error, null, 3))
+            }
+        } else {
+            return await this.ordersModel.findOne({code: event.payload.code});
+        }
+    }
+
+    async getCustomers() {
+        return await this.customersModel.find({}).exec();
+      }
 }
 
 

@@ -21,6 +21,12 @@ export class AppController {
     return await this.appService.getEvent(product);
   }
 
+  @Get('query/:key')
+  async getQuery(@Param('key') key: string): Promise<any> {
+    const result = await this.appService.getQuery(key);
+    return result;
+  }
+
   @Post('event')
   async postEvent(@Body() event: BuildEvent) {
     try {

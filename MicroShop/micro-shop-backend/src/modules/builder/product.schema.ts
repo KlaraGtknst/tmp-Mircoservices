@@ -13,6 +13,7 @@ export class MSProduct {
   @Prop({ required: true })
   amountTime: string;
 
+  @Prop()
   price: string;
 }
 
