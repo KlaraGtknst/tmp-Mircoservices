@@ -156,11 +156,9 @@ describe('The Shop Backend Test', () => {
   })
 
   //reverse order
-  it('resets the shop database', () => {
+  it('resets the shop database and sends events in reverse order', () => {
     cy.visit('http://localhost:3100/reset')
-  })
 
-  it('Reverse order: sends an update 20 socks', () => {
     cy.request('POST', 'http://localhost:3100/event', {
       eventType: 'productStored',
       blockId: 'black_socks',
@@ -176,9 +174,7 @@ describe('The Shop Backend Test', () => {
       expect(product).have.property('product', 'black_socks')
       expect(product).have.property('amount', 20);
     })
-  })
 
-  it('posts a product stored event earlier', () => {
     cy.request('POST', 'http://localhost:3100/event', {
       eventType: 'productStored',
       blockId: 'black_socks',
@@ -194,24 +190,7 @@ describe('The Shop Backend Test', () => {
       expect(product).have.property('product', 'black_socks')
       expect(product).have.property('amount', 20);
       })
-    })
 
-  it('repeats the post without a change', () => {
-    cy.request('POST', 'http://localhost:3100/event', {
-      eventType: 'productStored',
-      blockId: 'black_socks',
-      time: '12:04',
-      tags: [],
-      payload: {
-        product: 'black_socks',
-        amount: 10,
-      }
-    })
-    .then((response) => {
-      const product = response.body;
-      expect(product).have.property('product', 'black_socks')
-      expect(product).have.property('amount', 20);
-    })
   })
 
 })

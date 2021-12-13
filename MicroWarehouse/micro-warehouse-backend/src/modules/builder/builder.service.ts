@@ -54,7 +54,7 @@ export class BuilderService implements OnModuleInit {
     const event = {
       blockId: palette.barcode,
       time: new Date().toISOString(),
-      eventType: 'PaletteStored',
+      eventType: 'paletteStored',
       tags: ['palettes', palette.product],
       payload: palette,
     };
@@ -139,9 +139,10 @@ export class BuilderService implements OnModuleInit {
   }
 
   async computeAmount(productName: any) {
+    //all paletteStored for product
     const paletteStoredList: any[] = await this.buildEventModel
       .find({
-        eventType: 'PaletteStored',
+        eventType: 'paletteStored',
         'payload.product': productName,
       })
       .exec();
@@ -150,6 +151,9 @@ export class BuilderService implements OnModuleInit {
     for (const e of paletteStoredList) {
       sum = sum + e.payload.amount;
     }
+
+    //minus picked orders later
+
     return sum;
   }
 }

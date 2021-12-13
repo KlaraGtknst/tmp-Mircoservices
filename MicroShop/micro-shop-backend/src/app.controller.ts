@@ -18,7 +18,7 @@ export class AppController implements OnModuleInit {
   ) {}
 
   onModuleInit() {
-    //subscribe at warehouese
+    //subscribe at warehouse
     this.httpService
       .post('http://localhost:3000/subscribe', {
         subscriberUrl: 'http://localhost:3100/event',
@@ -26,6 +26,7 @@ export class AppController implements OnModuleInit {
       })
       .subscribe(async (response) => {
         try {
+          //list of events
           const eventList: any[] = response.data;
           for (const event of eventList) {
             await this.appService.handleEvent(event);

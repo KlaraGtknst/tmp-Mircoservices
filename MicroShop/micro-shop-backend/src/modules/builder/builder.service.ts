@@ -30,28 +30,6 @@ export class BuilderService implements OnModuleInit {
 
     async reset() {
         await this.clear();
-        /*await this.handleProductStored( {
-            blockId: 'rubber_boots',
-            time: '11:00:00',
-            eventType: 'ProductStored',
-            tags: ['product', 'rubber_boots'],
-            payload: {
-                product: 'rubber_boots',
-                amount: 23,
-                location: 'entry_door',
-            }
-        });
-        await this.handleProductStored( {
-            blockId: 'rubber_boots',
-            time: '11:00:00',
-            eventType: 'ProductStored',
-            tags: ['product', 'rubber_boots'],
-            payload: {
-                product: 'rubber_boots',
-                amount: 23,
-                location: 'entry_door',
-            }
-        });*/
     }
 
     async getByTag(tag: string) {
@@ -72,7 +50,6 @@ export class BuilderService implements OnModuleInit {
             const newAmount = await this.computeNewProductAmount(event.payload.product);
             const productPatch = {
                 product: event.blockId,
-                //amount: event.payload.amount,
                 amount: newAmount,
                 amountTime: event.time,
             }
@@ -112,7 +89,6 @@ export class BuilderService implements OnModuleInit {
                     time: event.time,
                     eventType: event.eventType,
                     payload: event.payload,
-                //event,
                 },
                 { new: true}
             ).exec();
@@ -186,9 +162,11 @@ export class BuilderService implements OnModuleInit {
       }
 
     async computeNewProductAmount(productName) {
+        //last productStored amount
         const lastStoredEvent = await this.buildEventModel.findOne({blockId: productName}).exec();
         const lastEvent = lastStoredEvent.payload.amount;
 
+        //minus new orders
         const newOrdersList: any[] = await this.buildEventModel.find(
             {
                 eventType: 'placeOrder',
