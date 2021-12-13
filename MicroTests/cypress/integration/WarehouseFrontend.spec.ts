@@ -25,4 +25,34 @@ describe('Warehouse Test', () => {
     cy.get('#cy01').contains('yellow scarf')
     cy.get('#cy01').contains('front row, shelf 1')
   })
+
+  it('suscribes the shop as listener to the warehouse', () => {
+    cy.request('POST', 'http://localhost:3000/subscribe', {
+      subscriberUrl: 'http://localhost:3100/event',
+      lastEventTime: '0'
+    })
+    .then((response) => {
+      const eventList : any[] = response.body;
+      console.log('subscribe at warehouse is \n' + JSON.stringify(eventList, null, 3)) ;
+      expect(eventList.length).gt(0);
+    })
+  })
+
+  it('Adds another palette of yellow scarfs', () => {
+    cy.get('#add-button').click()
+    cy.contains('Store new palette:')
+
+    cy.get('#barcodeInput').type('cy02')
+    cy.get('#productInput').type('yellow scarf')
+    cy.get('#amountInput').type('24')
+    cy.get('#locationInput').type('front row, shelf 2')
+    cy.get('#addPalette').click()
+
+    cy.contains('Warehouse Palettes:')
+    cy.get('#cy02').contains('24')
+    cy.get('#cy02').contains('yellow scarf')
+    cy.get('#cy02').contains('front row, shelf 2')
+  })
+
+
 })

@@ -69,9 +69,11 @@ export class BuilderService implements OnModuleInit {
 
         if(storeSuccess) {
             // store a product object
+            const newAmount = await this.computeNewProductAmount(event.payload.product);
             const productPatch = {
                 product: event.blockId,
-                amount: event.payload.amount,
+                //amount: event.payload.amount,
+                amount: newAmount,
                 amountTime: event.time,
             }
             newProduct = await this.storeProduct(productPatch)
@@ -86,14 +88,7 @@ export class BuilderService implements OnModuleInit {
         try {
             const newProduct = await this.productsModel.findOneAndUpdate(
                 {product: newProductData.product},
-                {
-                    $inc: {amount: newProductData.amount},
-                    $set: {
-                        amountTime: newProductData.amountTime,
-                        product: newProductData.product,
-
-                    }
-                },
+                newProductData,
                 {upsert: true, new: true}).exec();
             console.log('BuilderService.storeProduct storeProduct: \n' + JSON.stringify(newProduct, null, 3));
             return newProduct;
@@ -112,7 +107,13 @@ export class BuilderService implements OnModuleInit {
 
             const newEvent = await this.buildEventModel.findOneAndUpdate(
                 { blockId: event.blockId, time: {$lt: event.time}},
-                event,
+                {
+                    tags: event.tags,
+                    time: event.time,
+                    eventType: event.eventType,
+                    payload: event.payload,
+                //event,
+                },
                 { new: true}
             ).exec();
             console.log('builder service storeEvent line 62\n' + JSON.stringify(newEvent, null, 3));
@@ -183,6 +184,30 @@ export class BuilderService implements OnModuleInit {
     async getCustomers() {
         return await this.customersModel.find({}).exec();
       }
+
+    async computeNewProductAmount(productName) {
+        const lastStoredEvent = await this.buildEventModel.findOne({blockId: productName}).exec();
+        const lastEvent = lastStoredEvent.payload.amount;
+
+        const newOrdersList: any[] = await this.buildEventModel.find(
+            {
+                eventType: 'placeOrder',
+                'payload.product': productName
+            }
+        ).exec();
+
+        const newOrdersNumber = newOrdersList.length;
+
+        const laterShippingList: any[] = await this.buildEventModel.find(
+            {
+                eventType: 'orderPicked',
+                time: {$gt: lastStoredEvent.time},
+                'payload.product': productName
+            }
+        ).exec();
+        return lastEvent;
+    }
+
 }
 
 

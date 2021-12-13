@@ -58,7 +58,7 @@ describe('The Shop Backend Test', () => {
     .then((response) => {
       const product = response.body;
       expect(product).have.property('product', 'black_socks')
-      expect(product).have.property('amount', 30);
+      expect(product).have.property('amount', 20);
     })
   })
 
@@ -75,7 +75,7 @@ describe('The Shop Backend Test', () => {
     }).then((response) => {
       const product = response.body;
       expect(product).have.property('product', 'black_socks')
-      expect(product).have.property('amount', 30);
+      expect(product).have.property('amount', 20);
       expect(product).have.property('price', '$42');
     })
   })
@@ -109,7 +109,7 @@ describe('The Shop Backend Test', () => {
   })
 
   //Test second time
-  it('sends an add offer for black_socks', () => {
+  it('Check dublicate requests: sends an add offer for black_socks', () => {
     cy.request('POST', 'http://localhost:3100/event', {
       eventType: 'addOffer',
       blockId: 'black_socks_price',
@@ -122,12 +122,12 @@ describe('The Shop Backend Test', () => {
     }).then((response) => {
       const product = response.body;
       expect(product).have.property('product', 'black_socks')
-      expect(product).have.property('amount', 30);
+      expect(product).have.property('amount', 20);
       expect(product).have.property('price', '$42');
     })
   })
 
-  it('sends a placeOrder command', () => {
+  it('Check dublicate requests: sends a placeOrder command', () => {
     cy.request('POST', 'http://localhost:3100/event', {
       eventType: 'placeOrder',
       blockId: 'o1121',
@@ -155,5 +155,63 @@ describe('The Shop Backend Test', () => {
     })
   })
 
+  //reverse order
+  it('resets the shop database', () => {
+    cy.visit('http://localhost:3100/reset')
+  })
+
+  it('Reverse order: sends an update 20 socks', () => {
+    cy.request('POST', 'http://localhost:3100/event', {
+      eventType: 'productStored',
+      blockId: 'black_socks',
+      time: '12:05',
+      tags: [],
+      payload: {
+        product: 'black_socks',
+        amount: 20,
+      }
+    })
+    .then((response) => {
+      const product = response.body;
+      expect(product).have.property('product', 'black_socks')
+      expect(product).have.property('amount', 20);
+    })
+  })
+
+  it('posts a product stored event earlier', () => {
+    cy.request('POST', 'http://localhost:3100/event', {
+      eventType: 'productStored',
+      blockId: 'black_socks',
+      time: '12:04',
+      tags: [],
+      payload: {
+        product: 'black_socks',
+        amount: 22,
+      }
+    })
+    .then((response) => {
+      const product = response.body;
+      expect(product).have.property('product', 'black_socks')
+      expect(product).have.property('amount', 20);
+      })
+    })
+
+  it('repeats the post without a change', () => {
+    cy.request('POST', 'http://localhost:3100/event', {
+      eventType: 'productStored',
+      blockId: 'black_socks',
+      time: '12:04',
+      tags: [],
+      payload: {
+        product: 'black_socks',
+        amount: 10,
+      }
+    })
+    .then((response) => {
+      const product = response.body;
+      expect(product).have.property('product', 'black_socks')
+      expect(product).have.property('amount', 20);
+    })
+  })
 
 })

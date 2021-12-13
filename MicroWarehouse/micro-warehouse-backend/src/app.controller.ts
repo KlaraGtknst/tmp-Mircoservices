@@ -1,9 +1,12 @@
-import { Body, Controller, Get, Param, Post } from '@nestjs/common';
+import { Body, Controller, Get, Logger, Param, Post } from '@nestjs/common';
 import { AppService } from './app.service';
 import Command from './modules/builder/command';
+import Subscription from './modules/builder/subscription';
 
 @Controller()
 export class AppController {
+  private logger = new Logger(AppController.name);
+
   constructor(private readonly appService: AppService) {}
 
   //https.//localhost:3000/query/palettes
@@ -27,6 +30,19 @@ export class AppController {
       return c;
     } catch (error) {
       return error;
+    }
+  }
+
+  @Post('subscribe')
+  async postSubscribe(@Body() subscription: Subscription) {
+    try {
+      const c = await this.appService.handleSubscription(subscription);
+      return c;
+    } catch (error) {
+      console.log(
+        'Warehouse postSubscripton error \n' + JSON.stringify(error, null, 3),
+      );
+      //return error;
     }
   }
 

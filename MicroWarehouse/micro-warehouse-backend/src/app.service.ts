@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { BuilderService } from './modules/builder/builder.service';
 import Command from './modules/builder/command';
+import Subscription from './modules/builder/subscription';
 
 @Injectable()
 export class AppService {
@@ -26,5 +27,9 @@ export class AppService {
 
   getHello(): string {
     return 'Hello World!';
+  }
+
+  async handleSubscription(subsribtion: Subscription) {
+    return await this.modelBuilderService.handleSubscription(subsribtion);
   }
 }
