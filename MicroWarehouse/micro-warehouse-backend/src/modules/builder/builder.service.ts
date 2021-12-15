@@ -25,12 +25,6 @@ export class BuilderService implements OnModuleInit {
   }
 
   async store(event: BuildEvent) {
-    /*const filter = { blockId: event.blockId };
-    await this.buildEventModel
-      .findOneAndUpdate(filter, event, { upsert: true })
-      .exec();
-    return true;*/
-
     //ensure at least a placeholder
     const placeholder = await this.buildEventModel
       .findOneAndUpdate(
@@ -95,7 +89,7 @@ export class BuilderService implements OnModuleInit {
   }
 
   clear() {
-    return this.buildEventModel.remove(); //deleteOne(); //db.dropCollection('eventstores');
+    return this.buildEventModel.remove();
   }
 
   async handleSubscription(subscription: Subscription) {
@@ -113,7 +107,7 @@ export class BuilderService implements OnModuleInit {
     return eventList;
   }
 
-  async publish(newEvent: BuildEvent) {
+  publish(newEvent: BuildEvent) {
     console.log(
       'BuildService subscribers URLS: \n' +
         JSON.stringify(this.subscriberUrls, null, 3),

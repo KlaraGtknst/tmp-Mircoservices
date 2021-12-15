@@ -16,9 +16,9 @@ export class AppService {
     return answer;
   }
 
-  handleCommand(command: Command) {
+  async handleCommand(command: Command) {
     if (command.opCode === 'storePalette') {
-      this.modelBuilderService.storePalette(command.parameters);
+      await this.modelBuilderService.storePalette(command.parameters);
       return command;
     } else {
       return `cannot handle ${command.opCode}`;
