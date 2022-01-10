@@ -100,7 +100,7 @@ export class BuilderService implements OnModuleInit {
 
     const eventList = await this.buildEventModel
       .find({
-        eventType: 'productStored', //'PaletteStored',
+        eventType: 'productStored',
         time: { $gt: subscription.lastEventTime },
       })
       .exec();

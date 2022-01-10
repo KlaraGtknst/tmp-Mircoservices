@@ -80,7 +80,7 @@ export class BuilderService implements OnModuleInit {
                 { blockId: event.blockId, $setOnInsert: {time: ''}},
                 { upsert: true, new: true}
             ).exec();
-            // console.log('builder service storeEvent line 56\n' + JSON.stringify(placeholder, null, 3));
+            // console.log('builder service storeEvent line 83\n' + JSON.stringify(placeholder, null, 3));
 
             const newEvent = await this.buildEventModel.findOneAndUpdate(
                 { blockId: event.blockId, time: {$lt: event.time}},
@@ -92,7 +92,7 @@ export class BuilderService implements OnModuleInit {
                 },
                 { new: true}
             ).exec();
-            console.log('builder service storeEvent line 62\n' + JSON.stringify(newEvent, null, 3));
+            console.log('builder service storeEvent line 95\n' + JSON.stringify(newEvent, null, 3));
 
             return newEvent != null;
     }
