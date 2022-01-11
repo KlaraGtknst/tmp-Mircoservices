@@ -8,7 +8,7 @@
 
     <div class="row d-flex justify-content-center my-2">
       <div class="col d-flex justify-content-center">
-        <input id="name" type="text" placeholder="product name?" formControlName="productName">
+        <input id="name" type="text" placeholder="product name?" formControlName="productName" [style.color]="!formGroup.value.productName?'black':null">
       </div>
     </div>
 
@@ -20,7 +20,7 @@
 
     <div class="row d-flex justify-content-center my-2">
       <div class="col d-flex justify-content-center">
-        <input id="price" type="text" placeholder="price?" formControlName="productPrice">
+        <input id="price" type="text" placeholder="price?" formControlName="productPrice" [style.color]="!formGroup.value.productPrice?'black':null">
       </div>
     </div>
 
