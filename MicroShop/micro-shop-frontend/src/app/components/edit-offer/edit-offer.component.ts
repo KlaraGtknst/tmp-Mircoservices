@@ -17,7 +17,7 @@ export class EditOfferComponent implements OnInit {
 
   formGroup = new FormGroup({
     productName: new FormControl('', [Validators.required, this.productNameValidator()]),
-    productPrice: new FormControl('', [Validators.required, Validators.pattern("^[0-9]+(.[0-9]+)?[€$]?$"), this.productPriceValidator()]),
+    productPrice: new FormControl('', [Validators.required, Validators.pattern("^[0-9]*(.[0-9]+)?[€$]?$"), this.productPriceValidator()]),
   });
 
   productNameValidator() {
