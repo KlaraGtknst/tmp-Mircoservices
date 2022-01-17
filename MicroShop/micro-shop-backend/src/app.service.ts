@@ -1,5 +1,6 @@
 /* eslint-disable prettier/prettier */
 import { Injectable } from '@nestjs/common';
+import { SetPriceDto } from './common/SetPriceDto';
 import { BuildEvent } from './modules/builder/build-event.schema';
 import { BuilderService } from './modules/builder/builder.service';
 
@@ -14,6 +15,11 @@ export class AppService {
   async getQuery(key: string): Promise<any> {
     if (key === "customers") {
       return await this.modelBuilderService.getCustomers();
+    } else if (key === "products") {
+      return await this.modelBuilderService.getProducts();
+    } else if (key.startsWith("product-")) {
+      const name = key.substring('product-'.length);
+      return await this.modelBuilderService.getProduct(name);
     }
     else {
       return {error: 'Microshop backend does not know how to handle query key' + key}
@@ -43,5 +49,9 @@ export class AppService {
       return await this.modelBuilderService.handlePlaceOrder(event);
     }
     return {error: 'shop backend does not know how to handle ' + event.eventType};
+  }
+
+  async setPrice(params: SetPriceDto) {
+    return await this.modelBuilderService.setPrice(params);
   }
 }

@@ -1,5 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
+import { ProductDto } from 'common/ProductDto';
 
 @Component({
   selector: 'app-offer-tasks',
@@ -10,20 +11,20 @@ export class OfferTasksComponent implements OnInit {
 
   constructor(private http: HttpClient) { }
 
-  public offers: any[] = [];
+  public offers: ProductDto[] = [];
 
   storeTasksString = "Hello offer Tasks";
 
   ngOnInit(): void {
 
     this.offers.push({
-      name: "jeans",
+      product: "jeans",
       state: "in stock",
       amount: 6,
       price: 0.0,
     });
     this.offers.push({
-      name: "tshirt",
+      product: "tshirt",
       state: "in stock",
       amount: 7,
       price: 0.0,
@@ -31,13 +32,22 @@ export class OfferTasksComponent implements OnInit {
 
     this.storeTasksString = `number of offers ${this.offers.length}`
 
-    /*
+
     this.http.get<any>('http://localhost:3100/query/products')
       .subscribe(
         answer => this.handleQueryResponse(answer),
-        error => this.storeTasksString = JSON.stringify(eror, null, 3)
-      );*/
+        error => this.storeTasksString = JSON.stringify(error, null, 3)
+      );
 
+  }
+
+  handleQueryResponse(answer: ProductDto[]) {
+    this.offers = [];
+    for (const product of answer) {
+      //console.log(JSON.stringify(product, null, 3));
+      this.offers.push(product);
+    }
+    this.storeTasksString = `number of offers ${this.offers.length}`;
   }
 
 

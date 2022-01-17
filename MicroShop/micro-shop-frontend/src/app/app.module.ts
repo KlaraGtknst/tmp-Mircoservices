@@ -9,6 +9,8 @@ import { AppComponent } from './app.component';
 import { HomeModule } from './components/home/home.module';
 import { EditOfferModule } from './components/edit-offer/edit-offer.module';
 import { OfferTasksModule } from './components/offer-tasks/offer-tasks.module';
+import { ToastModule, ToastService } from 'ng-bootstrap-ext';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 @NgModule({
   declarations: [
@@ -24,8 +26,10 @@ import { OfferTasksModule } from './components/offer-tasks/offer-tasks.module';
     HomeModule,
     OfferTasksModule,
     EditOfferModule,
+    ToastModule,
+    NgbModule,
   ],
-  providers: [],
+  providers: [ToastService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

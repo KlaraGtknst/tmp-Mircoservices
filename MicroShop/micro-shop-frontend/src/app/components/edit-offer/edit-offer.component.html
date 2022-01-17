@@ -14,7 +14,7 @@
 
     <div *ngIf="formGroup.get('productName')?.errors && formGroup.get('productName')?.dirty" class="row d-flex justify-content-center my-2">
       <div class="col d-flex justify-content-center">
-        <p style="color:red">name should be in jeans, t-shirt</p>
+        <p style="color:red">name should be in {{validNames}}</p>
       </div>
     </div>
 

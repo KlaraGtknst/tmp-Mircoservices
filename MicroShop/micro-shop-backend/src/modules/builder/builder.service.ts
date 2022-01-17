@@ -6,6 +6,7 @@ import { BuildEvent } from './build-event.schema';
 import { MSProduct } from './product.schema';
 import { Order } from './order.schema';
 import { Customer } from './customer.schema';
+import { SetPriceDto } from 'src/common/SetPriceDto';
 
 @Injectable()
 export class BuilderService implements OnModuleInit {
@@ -26,6 +27,26 @@ export class BuilderService implements OnModuleInit {
         await this.buildEventModel.deleteMany();
         await this.ordersModel.deleteMany();
         await this.customersModel.deleteMany();
+
+        //dummy data, delete later
+        this.storeProduct({
+            product: 'jeans',
+            amount: 10,
+            amountTime: '12:00',
+            price: 0.0,
+        })
+        this.storeProduct({
+            product: 'tshirt',
+            amount: 11,
+            amountTime: '12:01',
+            price: 0.0,
+        })
+        this.storeProduct({
+            product: 'socks',
+            amount: 12,
+            amountTime: '12:02',
+            price: 0.0,
+        })
     }
 
     async reset() {
@@ -159,7 +180,7 @@ export class BuilderService implements OnModuleInit {
 
     async getCustomers() {
         return await this.customersModel.find({}).exec();
-      }
+    }
 
     async computeNewProductAmount(productName) {
         //last productStored amount
@@ -184,6 +205,22 @@ export class BuilderService implements OnModuleInit {
             }
         ).exec();
         return lastEvent;
+    }
+
+    async getProducts() {
+        return await this.productsModel.find({}).exec();
+    }
+
+    async getProduct(name) {
+        return await this.productsModel.findOne({product: name}).exec();
+    }
+
+    async setPrice(params: SetPriceDto) {
+        return await this.productsModel.findOneAndUpdate(
+            {product: params.product},
+            {price: `${params.price}`},
+            {new: true}
+        ).exec()
     }
 
 }

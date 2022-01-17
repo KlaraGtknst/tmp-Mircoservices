@@ -8,6 +8,7 @@ import {
   OnModuleInit,
 } from '@nestjs/common';
 import { AppService } from './app.service';
+import { SetPriceDto } from './common/SetPriceDto';
 import { BuildEvent } from './modules/builder/build-event.schema';
 
 @Controller()
@@ -70,6 +71,16 @@ export class AppController implements OnModuleInit {
   async postEvent(@Body() event: BuildEvent) {
     try {
       return await this.appService.handleEvent(event);
+    } catch (error) {
+      return error;
+    }
+  }
+
+  @Post('cmd/setPrice')
+  async postCommand(@Body() params: SetPriceDto) {
+    try {
+      const c = await this.appService.setPrice(params);
+      return c;
     } catch (error) {
       return error;
     }
