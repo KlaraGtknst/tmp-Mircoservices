@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { AbstractControl, FormControl, FormGroup, ValidationErrors, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
+import { ProductDto } from 'common/ProductDto';
 import { ToastService } from 'ng-bootstrap-ext';
 
 @Component({
@@ -24,7 +25,7 @@ export class EditOfferComponent implements OnInit {
     );
   }
 
-  handleQueryResponse(answer: any) {
+  handleQueryResponse(answer: ProductDto[]) {
     this.validNames= [];
     for (const elem of answer) {
       this.validNames.push(elem.product);
