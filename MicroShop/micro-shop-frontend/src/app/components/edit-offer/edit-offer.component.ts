@@ -79,7 +79,8 @@ export class EditOfferComponent implements OnInit {
         this.router.navigate(['offer-tasks']);
       },
       (error) => {
-        this.toastService.error('Edit offer', `Problem: ${JSON.stringify(error, null, 3)}`);
+        //this.toastService.error('Edit offer', `Problem: ${JSON.stringify(error, null, 3)}`);
+        this.toastService.error('Edit offer', `Problem`, error);
       }
     );
   }

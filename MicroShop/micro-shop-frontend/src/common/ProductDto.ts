@@ -1,10 +1,10 @@
 /* eslint-disable prettier/prettier */
 
 //hinter Typen/Namen muessen default Werte stehen
-export class ProductDto {
-  product: string = "";
+export interface ProductDto {
+  product: string;
 
-  state: string = "";
+  state: string;
 
   amount?: number;
 
