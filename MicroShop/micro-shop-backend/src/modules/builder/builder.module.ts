@@ -1,3 +1,4 @@
+import { HttpModule } from '@nestjs/axios';
 import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
 import { BuildEventSchema } from './build-event.schema';
@@ -8,6 +9,7 @@ import { ProductSchema } from './product.schema';
 
 @Module({
   imports: [
+    HttpModule,
     MongooseModule.forFeature([
       { name: 'eventStore', schema: BuildEventSchema },
       { name: 'products', schema: ProductSchema },

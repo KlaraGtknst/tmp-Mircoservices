@@ -150,4 +150,8 @@ export class BuilderService implements OnModuleInit {
 
     return sum;
   }
+
+  async handleOrderPlaced(event: BuildEvent) {
+    return this.store(event);
+  }
 }

@@ -1,4 +1,5 @@
 import { Injectable } from '@nestjs/common';
+import { BuildEvent } from './modules/builder/build-event.schema';
 import { BuilderService } from './modules/builder/builder.service';
 import Command from './modules/builder/command';
 import Subscription from './modules/builder/subscription';
@@ -31,5 +32,15 @@ export class AppService {
 
   async handleSubscription(subsribtion: Subscription) {
     return await this.modelBuilderService.handleSubscription(subsribtion);
+  }
+
+  async handleEvent(event: BuildEvent) {
+    if (event.eventType === 'orderPlaced') {
+      return await this.modelBuilderService.handleOrderPlaced(event);
+    } else {
+      return {
+        error: 'shop backend does not know how to handle ' + event.eventType,
+      };
+    }
   }
 }

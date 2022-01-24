@@ -10,7 +10,8 @@ import { HomeModule } from './components/home/home.module';
 import { EditOfferModule } from './components/edit-offer/edit-offer.module';
 import { OfferTasksModule } from './components/offer-tasks/offer-tasks.module';
 import { ToastModule, ToastService } from 'ng-bootstrap-ext';
-import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+//import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { OrderModule } from './components/order/order.module';
 
 @NgModule({
   declarations: [
@@ -24,10 +25,11 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
     ReactiveFormsModule,
     HttpClientModule,
     HomeModule,
+    OrderModule,
     OfferTasksModule,
     EditOfferModule,
     ToastModule,
-    NgbModule,
+    //NgbModule,
   ],
   providers: [ToastService],
   bootstrap: [AppComponent]
