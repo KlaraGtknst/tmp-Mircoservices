@@ -1,5 +1,18 @@
-
 <div class="container">
+  <div class="row d-flex justify-content-center my-2">
+    <div class="col d-flex justify-content-center">
+      Hello {{customer}} <br>
+    </div>
+  </div>
+
+<div class="row my-2 d-flex justify-content-center"
+  *ngFor= "let myOrder of orders">
+
+  <div class="col-6 d-flex justify-content-center">
+    <label>Your {{myOrder.code}} {{myOrder.product}} are in state {{myOrder.state}}</label>
+  </div>
+</div>
+
   <div class="row d-flex justify-content-center my-2">
     <div class="col d-flex justify-content-center">
       On sale today:
@@ -19,6 +32,7 @@
     <div class="col-1 d-flex justify-content-center">
       <label style="font-weight:bold">price: </label>
     </div>
+
 
   </div>
 

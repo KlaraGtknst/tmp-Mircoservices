@@ -1,0 +1,40 @@
+<div class="container">
+  <div class="row d-flex justify-content-center my-2">
+    <div class="col d-flex justify-content-center">
+      Welcome to Pick Tasks: <br>
+    </div>
+  </div>
+
+  <div class="row d-flex justify-content-center my-2">
+    <div class="col-1 d-flex justify-content-center">
+      <label>product</label>
+    </div>
+    <div class="col-3 d-flex justify-content-center">
+      <label>state</label>
+    </div>
+    <div class="col-3 d-flex justify-content-center">
+      <label>customer, address </label>
+    </div>
+    <div class="col-3 d-flex justify-content-center">
+      <label>location</label>
+    </div>
+  </div>
+
+
+  <a class="row my-2 d-flex justify-content-center" [routerLink]="['pick-tasks/edit-offer', pickTask.product]" *ngFor= "let pickTask of pickTasks">
+    <div class="col-1 d-flex justify-content-center">
+      <label>{{pickTask.product}} </label>
+    </div>
+    <div class="col-3 d-flex justify-content-center">
+      <label>{{pickTask.state}} </label>
+    </div>
+    <div class="col-3 d-flex justify-content-center">
+      <label>{{pickTask.address}} </label>
+    </div>
+    <div class="col-3 d-flex justify-content-center">
+      <label>{{pickTask.location}} </label>
+    </div>
+  </a>
+
+</div>
+

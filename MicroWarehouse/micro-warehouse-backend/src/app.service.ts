@@ -9,12 +9,17 @@ export class AppService {
   constructor(private readonly modelBuilderService: BuilderService) {}
 
   async getQuery(key: string): Promise<any> {
-    const list = await this.modelBuilderService.getByTag(key);
-    const answer = {
-      key: key,
-      result: list,
-    };
-    return answer;
+    if (key === 'orders') {
+      const list = await this.modelBuilderService.getOrders(key);
+      return list;
+    } else {
+      const list = await this.modelBuilderService.getByTag(key);
+      const answer = {
+        key: key,
+        result: list,
+      };
+      return answer;
+    }
   }
 
   async handleCommand(command: Command) {
@@ -35,16 +40,26 @@ export class AppService {
   }
 
   async handleEvent(event: BuildEvent) {
-    if (event.eventType === 'productPlaced') {
-      //return await this.modelBuilderService.handleOrderPlaced(event);
+    if (event.eventType === 'productOrdered') {
+      //TODO: event hat keine Location
       console.log(
         'Warehouse app service handle event gets \n' +
           JSON.stringify(event, null, 3),
       );
+      return await this.modelBuilderService.handleProductOrdered(event);
     } else {
       return {
         error: 'shop backend does not know how to handle ' + event.eventType,
       };
     }
+  }
+
+  async handlePickDone(params: any) {
+    return await this.modelBuilderService.handlePickDone(params);
+  }
+
+  async getReset() {
+    await this.modelBuilderService.reset();
+    return 'The Warehouse database is clear.';
   }
 }

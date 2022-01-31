@@ -7,6 +7,7 @@ import { OrderComponent } from './components/order/order.component';
 
 const routes: Routes = [
   { path: 'home/order/:product', component: OrderComponent },
+  { path: 'home/:customer', component: HomeComponent },
   { path: 'home', component: HomeComponent },
   { path: 'offer-tasks/edit-offer', component: EditOfferComponent },
   { path: 'offer-tasks', component: OfferTasksComponent },

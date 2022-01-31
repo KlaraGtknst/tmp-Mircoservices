@@ -4,6 +4,7 @@ import { AppService } from './app.service';
 import Command from './modules/builder/command';
 import Subscription from './modules/builder/subscription';
 import { HttpService } from '@nestjs/axios';
+import { BuildEvent } from './modules/builder/build-event.schema';
 
 @Controller()
 export class AppController {
@@ -73,6 +74,26 @@ export class AppController {
     }
   }
 
+  @Post('event')
+  async postEvent(@Body() event: BuildEvent) {
+    try {
+      return await this.appService.handleEvent(event);;
+    } catch (error) {
+      return error;
+    }
+  }
+
+  @Post('cmd/pickDone')
+  async postPickDOne(@Body() params: any) {
+    try {
+      this.logger.log(`\npostPickDone got ${JSON.stringify(params, null, 2)}`)
+      const c = await this.appService.handlePickDone(params);
+      return c;
+    } catch (error) {
+      return error;
+    }
+  }
+
   @Post('subscribe')
   async postSubscribe(@Body() subscription: Subscription) {
     try {
@@ -92,5 +113,10 @@ export class AppController {
   @Get()
   getHello(): string {
     return this.appService.getHello();
+  }
+
+  @Get('reset')
+  async getReset() {
+    return await this.appService.getReset();
   }
 }

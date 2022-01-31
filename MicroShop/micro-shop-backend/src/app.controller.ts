@@ -109,13 +109,13 @@ export class AppController implements OnModuleInit {
   @Post('subscribe')
   async postSubscribe(@Body() subscription: Subscription) {
     try {
-      console.log(
+      /*console.log(
         `\n postSubscribe got subscription ${JSON.stringify(
           subscription,
           null,
           3,
         )}`,
-      );
+      );*/
       const c = await this.appService.handleSubscription(subscription);
       if (!subscription.isReturnSubscription) {
         this.subscribeAtWarehouse(true);

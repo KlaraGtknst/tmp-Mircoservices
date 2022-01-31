@@ -3,6 +3,8 @@ import { Injectable, OnModuleInit } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { BuildEvent } from './build-event.schema';
+import { Palette } from './palette.schema';
+import { PickTask } from './pick-task.schema';
 import Subscription from './subscription';
 
 @Injectable()
@@ -12,6 +14,8 @@ export class BuilderService implements OnModuleInit {
   constructor(
     private httpService: HttpService,
     @InjectModel('eventStore') private buildEventModel: Model<BuildEvent>,
+    @InjectModel('pickTaskStore') private pickTaskModel: Model<PickTask>,
+    @InjectModel('paletteStore') private paletteModel: Model<Palette>,
   ) {}
 
   async onModuleInit() {
@@ -21,6 +25,16 @@ export class BuilderService implements OnModuleInit {
   getByTag(tag: string) {
     console.log('getByTag called with ' + tag);
     const list = this.buildEventModel.find({ tags: tag }).exec();
+    return list;
+  }
+
+  getOrders(tag: string) {
+    console.log('getOrders called with ' + tag);
+    //location aber keine state oder customer
+    //const list = this.paletteModel.find({}).exec();
+    //keine location
+    const list = this.pickTaskModel.find({}).exec(); // tags: tag
+    //console.log('Builder Service WH BE: ' + JSON.stringify(list, null, 3));
     return list;
   }
 
@@ -59,6 +73,8 @@ export class BuilderService implements OnModuleInit {
       const amount = await this.computeAmount(palette.product);
 
       if (storeSuccess) {
+        await this.storeModelPalette(palette);
+
         const newEvent = {
           eventType: 'productStored',
           blockId: palette.product,
@@ -88,8 +104,16 @@ export class BuilderService implements OnModuleInit {
     return palette;
   }
 
-  clear() {
-    return this.buildEventModel.remove();
+  private async storeModelPalette(palette: any) {
+    await this.paletteModel
+      .findOneAndUpdate({ barcode: palette.barcode }, palette, { upsert: true })
+      .exec();
+  }
+
+  async clear() {
+    await this.paletteModel.deleteMany();
+    await this.pickTaskModel.deleteMany();
+    await this.buildEventModel.deleteMany();
   }
 
   async handleSubscription(subscription: Subscription) {
@@ -153,5 +177,108 @@ export class BuilderService implements OnModuleInit {
 
   async handleOrderPlaced(event: BuildEvent) {
     return this.store(event);
+  }
+
+  async handleProductOrdered(event: BuildEvent) {
+    const storeSuccess = await this.store(event);
+    if (storeSuccess) {
+      const params = event.payload;
+      //Added
+      this.storeModelPalette(params);
+      /*palette.amount = Number(palette.amount)
+      const event = {
+        blockId: palette.barcode,
+        time: new Date().toISOString(),
+        eventType: 'paletteStored',
+        tags: ['palettes', palette.product],
+        payload: palette,
+      };*/
+      //Klara Ende
+      const productPalettes = await this.paletteModel
+        .find({ product: params.product })
+        .exec();
+      /*console.log(
+        'BuilderService WH BE event.payload: ' +
+          JSON.stringify(event.payload, null, 3),
+      );*/
+      /*console.log(
+        'BuilderService WH BE productPalettes: ' +
+          JSON.stringify(productPalettes, null, 3),
+      );*/
+      const locations: string[] = [];
+      for (const pal of productPalettes) {
+        console.log(
+          'BuilderService WH BE pal: ' + JSON.stringify(pal, null, 3),
+        );
+        if (pal.location != null) {
+          locations.push(pal.location);
+        }
+      }
+      console.log(
+        'BuilderService WH BE locations: ' + JSON.stringify(locations, null, 3),
+      );
+      const pickTask = {
+        code: params.order, //TODO: warum Filter order statt code???
+        product: params.product,
+        address: params.customer + ', ' + params.address,
+        location: locations,
+        state: 'order placed',
+      };
+      console.log(
+        'BuilderService WH BE pickTask: ' + JSON.stringify(pickTask, null, 3),
+      );
+      const result = this.pickTaskModel
+        .findOneAndUpdate({ code: params.code }, pickTask, {
+          //{ product: params.product }, pickTask, {
+          upsert: true,
+          new: true,
+        })
+        .exec();
+
+      console.log('BuilderService WH BE: ' + JSON.stringify(result, null, 3));
+    }
+    return 200;
+  }
+
+  async handlePickDone(params: any) {
+    //update palette
+    const pal = await this.paletteModel
+      .findOneAndUpdate(
+        { location: params.location },
+        { $inc: { amount: -1 } },
+        { new: true },
+      )
+      .exec();
+    console.log(
+      `handlePickOnreDone new palette\n${JSON.stringify(pal, null, 3)}`,
+    );
+
+    //update pickTasks
+    const pick = await this.pickTaskModel
+      .findOneAndUpdate(
+        { code: params.taskCode },
+        { palette: pal.barcode, state: 'shipping' },
+        { new: true },
+      )
+      .exec();
+
+    //publish change
+    const event = {
+      blockId: pick.code,
+      time: new Date().toISOString(),
+      eventType: 'orderPicked',
+      tags: ['orders', pick.code],
+      payload: {
+        code: pick.code,
+        state: pick.state,
+      },
+    };
+
+    const storeSuccess = await this.store(event);
+    this.publish(event);
+  }
+
+  async reset() {
+    await this.clear();
   }
 }

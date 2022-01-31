@@ -49,7 +49,7 @@ export class OrderComponent implements OnInit {
     this.http.post<any>('http://localhost:3100/cmd/placeOrder', params).subscribe(
       () => {
         this.toastService.success('Order', 'order submitted successfully !!!');
-        this.router.navigate(['home']);
+        this.router.navigate(['home', this.formGroup.get('customer')?.value]);
       },
       (error) => {
         this.toastService.error('Order not submitted', `Problem`, error);

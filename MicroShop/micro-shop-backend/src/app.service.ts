@@ -22,6 +22,9 @@ export class AppService {
     } else if (key.startsWith("product-")) {
       const name = key.substring('product-'.length);
       return await this.modelBuilderService.getProduct(name);
+    } else if (key.startsWith('orders_')) {
+      const customer = key.substring('orders_'.length);
+      return await this.modelBuilderService.getOrdersOf(customer);
     }
     else {
       return {error: 'Microshop backend does not know how to handle query key' + key}
@@ -47,8 +50,10 @@ export class AppService {
       return await this.modelBuilderService.handleProductStored(event);
     } else if (event.eventType === 'addOffer') {
       return await this.modelBuilderService.handleAddOffer(event);
-    } else if (event.eventType === 'placeOrder' || event.eventType === 'orderPicked') {
+    } else if (event.eventType === 'placeOrder') {
       return await this.modelBuilderService.handlePlaceOrder(event);
+    } else if (event.eventType === 'orderPicked') {
+      return await this.modelBuilderService.handleOrderPicked(event);
     }
     return {error: 'shop backend does not know how to handle ' + event.eventType};
   }

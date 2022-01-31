@@ -1,0 +1,33 @@
+
+<form [formGroup]="formGroup" (ngSubmit)="submitPick()">
+  <div class="container">
+    <div class="row d-flex justify-content-center my-2">
+      <div class="col d-flex justify-content-center">
+        Pick details: {{product}} from {{location}}
+      </div>
+    </div>
+
+
+    <div class="row d-flex justify-content-center my-2">
+      <div class="col d-flex justify-content-center">
+        <input id="productInput" type="text" placeholder="product?" formControlName="product" >
+      </div>
+    </div>
+
+    <div class="row d-flex justify-content-center my-2">
+      <div class="col d-flex justify-content-center">
+        <input id="locationInput" type="text" placeholder="loaction?" formControlName="location" >
+      </div>
+    </div>
+
+    <div class="row d-flex justify-content-center my-2">
+      <div class="col d-flex justify-content-center">
+        <button id="doneButton" type="submit" [disabled]="!formGroup.valid" class="btn btn-primary">Submit</button>
+      </div>
+    </div>
+
+    <p>{{formGroup.status}} {{formGroup.errors}} </p>
+
+  </div>
+</form>
+<ngbx-toast-list></ngbx-toast-list>

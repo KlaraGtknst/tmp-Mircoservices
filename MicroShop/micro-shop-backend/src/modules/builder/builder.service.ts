@@ -294,6 +294,38 @@ export class BuilderService implements OnModuleInit {
           .exec();
         return eventList;
       }
+      
+      async getOrdersOf(customer) {
+        return await this.ordersModel.find({customer: customer}).exec();
+    }
+
+    async handleOrderPicked(event: BuildEvent) {
+
+        const params = event.payload;
+        const order = await this.ordersModel.findOneAndUpdate(
+            {code: params.code},
+            {
+                state: params.state
+            },
+            {new: true}
+        ).exec();
+
+        const newEvent = {
+            blockId: order.code,
+            time: new Date().toISOString(),
+            eventType: 'orderPicked',
+            tags: ['orders', order.code],
+            payload: {
+                code: order.code,
+                product: order.product,
+                address: order.customer + ', ' + order.address,
+                state: order.state
+            }
+        }
+        await this.storeEvent(newEvent);
+        
+        return newEvent;
+    }
 
 }
 
