@@ -8,11 +8,6 @@ describe('The Shop FrontEnd Test', () => {
     cy.visit('http://localhost:4400/offer-tasks')
   })
 
-  /*it('clicks on offer tasks buttom', () => {
-    cy.get('#offer-tasks-button-home').click()
-    cy.contains('Offers overview:')
-  })*/
-
   it('clicks on edit offer tasks buttom', () => {
     cy.get('#edit-offer-button').click()
     cy.contains('Edit offer:')

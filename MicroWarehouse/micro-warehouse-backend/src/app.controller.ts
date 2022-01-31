@@ -16,7 +16,6 @@ export class AppController {
 
   onModuleInit() {
     //subscribe at shop
-    //auskommentieren wenns nicht an geht, dann zuerst shop BE, dann Warehouse BE
     this.subscribeAtMicroShop(false);
   }
 
@@ -35,6 +34,7 @@ export class AppController {
           for (const event of eventList) {
             await this.appService.handleEvent(event);
           }
+          console.log("WAREHOUSE subscribed at SHOP");
         } catch (error) {
           console.log(
             'Warehouse: AppController onModuleInit subscribe handleEvent error' +
@@ -44,7 +44,7 @@ export class AppController {
       },
     (error) => {
       console.log(
-        'AppController onModuleInit error' + JSON.stringify(error, null, 3),
+        'Warehouse: AppController onModuleInit error' + JSON.stringify(error, null, 3),
       );
     });
   }

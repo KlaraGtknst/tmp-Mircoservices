@@ -35,7 +35,7 @@ export class BuilderService implements OnModuleInit {
         await this.ordersModel.deleteMany();
         await this.customersModel.deleteMany();
 
-        //dummy data, delete later
+        //dummy data, delete later, necessary for edit-offer
         this.storeProduct({
             product: 'jeans',
             amount: 10,
@@ -242,7 +242,7 @@ export class BuilderService implements OnModuleInit {
             },
             {upsert: true, new: true}).exec()
 
-        console.log(`placeOrder stored: \n ${JSON.stringify(result, null, 3)}`)
+        //console.log(`placeOrder stored: \n ${JSON.stringify(result, null, 3)}`)
 
         await this.customersModel.findOneAndUpdate(
             {name: params.customer},
