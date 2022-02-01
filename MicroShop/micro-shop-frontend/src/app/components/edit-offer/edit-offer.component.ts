@@ -56,13 +56,6 @@ export class EditOfferComponent implements OnInit {
     };
   }
 
-  /*
-  productNameError(control: AbstractControl) {
-    const forbidden = this.validNames.indexOf(control.value) < 0;
-      return forbidden? {forbiddenName: {value: control.value}} : null;
-  }
-  */
-
   debugOut = 'Hello edit offer'
 
   submitOffer() {

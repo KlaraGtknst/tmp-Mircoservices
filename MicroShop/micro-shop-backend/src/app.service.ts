@@ -54,6 +54,8 @@ export class AppService {
       return await this.modelBuilderService.handlePlaceOrder(event);
     } else if (event.eventType === 'orderPicked') {
       return await this.modelBuilderService.handleOrderPicked(event);
+    } else if (event.eventType === 'orderDelivered') {
+      return await this.modelBuilderService.handleOrderDelivered(event);
     }
     return {error: 'shop backend does not know how to handle ' + event.eventType};
   }
@@ -69,5 +71,9 @@ export class AppService {
 
   async handleSubscription(subsription: Subscription) {
     return await this.modelBuilderService.handleSubscription(subsription);
+  }
+
+  async handleOrderPickedOrdersModel(product: string) {
+    return await this.modelBuilderService.handleOrderPickedOrdersModel(product);
   }
 }

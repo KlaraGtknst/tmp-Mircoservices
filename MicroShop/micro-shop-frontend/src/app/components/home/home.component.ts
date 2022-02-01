@@ -50,6 +50,8 @@ export class HomeComponent implements OnInit {
 
   handleOrderList(answer: any[]) {
     this.orders = answer;
+    //http://localhost:4400/home/customerName Konsole
+    console.log("handleOrderList Homecomponent Shop BE: " + JSON.stringify(this.orders, null, 3));
     this.customer = `${this.customer}, you have ${this.orders.length} active order(s).`
   }
 

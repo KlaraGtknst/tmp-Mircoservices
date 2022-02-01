@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import { Injectable } from '@nestjs/common';
 import { BuildEvent } from './modules/builder/build-event.schema';
 import { BuilderService } from './modules/builder/builder.service';
@@ -11,7 +12,16 @@ export class AppService {
   async getQuery(key: string): Promise<any> {
     if (key === 'orders') {
       const list = await this.modelBuilderService.getOrders(key);
+      return list; 
+    } else if (key === 'deliveries') {
+      const list = await this.modelBuilderService.getDeliveries(key);
       return list;
+    } else if (key.startsWith("orders-")) {
+      const name = key.substring('orders-'.length);
+      return await this.modelBuilderService.getProductLocation(name);
+    } else if (key.startsWith("ordersId-")) {
+      const name = key.substring('ordersId-'.length);
+      return await this.modelBuilderService.getProduct(name);
     } else {
       const list = await this.modelBuilderService.getByTag(key);
       const answer = {
@@ -56,6 +66,10 @@ export class AppService {
 
   async handlePickDone(params: any) {
     return await this.modelBuilderService.handlePickDone(params);
+  }
+
+  async handleDeliveryDone(params: any) {
+    return await this.modelBuilderService.handleDeliveryDone(params);
   }
 
   async getReset() {

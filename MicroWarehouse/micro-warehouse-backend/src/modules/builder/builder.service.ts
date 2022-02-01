@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import { HttpService } from '@nestjs/axios';
 import { Injectable, OnModuleInit } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
@@ -23,17 +24,23 @@ export class BuilderService implements OnModuleInit {
   }
 
   getByTag(tag: string) {
-    console.log('getByTag called with ' + tag);
+    //console.log('getByTag called with ' + tag);
     const list = this.buildEventModel.find({ tags: tag }).exec();
     return list;
   }
 
   getOrders(tag: string) {
-    console.log('getOrders called with ' + tag);
+    //console.log('getOrders called with ' + tag);
     //location aber keine state oder customer
     //const list = this.paletteModel.find({}).exec();
     //keine location
     const list = this.pickTaskModel.find({}).exec(); // tags: tag
+    //console.log('Builder Service WH BE: ' + JSON.stringify(list, null, 3));
+    return list;
+  }
+
+  getDeliveries(tag: string) {
+    const list = this.pickTaskModel.find({state: "picking"}).exec();
     //console.log('Builder Service WH BE: ' + JSON.stringify(list, null, 3));
     return list;
   }
@@ -94,13 +101,13 @@ export class BuilderService implements OnModuleInit {
       console.log(`store did not work ${error}`);
     }
 
-    console.log(
+    /*console.log(
       `ModelBuilderService.storePalette stores ${JSON.stringify(
         event,
         null,
         3,
       )}`,
-    );
+    );*/
     return palette;
   }
 
@@ -132,10 +139,10 @@ export class BuilderService implements OnModuleInit {
   }
 
   publish(newEvent: BuildEvent) {
-    console.log(
+    /*console.log(
       'BuildService subscribers URLS: \n' +
         JSON.stringify(this.subscriberUrls, null, 3),
-    );
+    );*/
     const oldUrls = this.subscriberUrls;
     this.subscriberUrls = [];
     for (const subscriberUrl of oldUrls) {
@@ -207,16 +214,16 @@ export class BuilderService implements OnModuleInit {
       );*/
       const locations: string[] = [];
       for (const pal of productPalettes) {
-        console.log(
+        /*console.log(
           'BuilderService WH BE pal: ' + JSON.stringify(pal, null, 3),
-        );
+        );*/
         if (pal.location != null) {
           locations.push(pal.location);
         }
       }
-      console.log(
+      /*console.log(
         'BuilderService WH BE locations: ' + JSON.stringify(locations, null, 3),
-      );
+      );*/
       const pickTask = {
         code: params.order, //TODO: warum Filter order statt code???
         product: params.product,
@@ -224,9 +231,9 @@ export class BuilderService implements OnModuleInit {
         location: locations,
         state: 'order placed',
       };
-      console.log(
+      /*console.log(
         'BuilderService WH BE pickTask: ' + JSON.stringify(pickTask, null, 3),
-      );
+      );*/
       const result = this.pickTaskModel
         .findOneAndUpdate({ code: params.code }, pickTask, {
           //{ product: params.product }, pickTask, {
@@ -235,7 +242,7 @@ export class BuilderService implements OnModuleInit {
         })
         .exec();
 
-      console.log('BuilderService WH BE: ' + JSON.stringify(result, null, 3));
+      //console.log('BuilderService WH BE: ' + JSON.stringify(result, null, 3));
     }
     return 200;
   }
@@ -244,33 +251,47 @@ export class BuilderService implements OnModuleInit {
     //update palette
     const pal = await this.paletteModel
       .findOneAndUpdate(
-        { location: params.location },
+        { location: params.location, product: params.product },
         { $inc: { amount: -1 } },
         { new: true },
       )
       .exec();
+
+    //update pick Task
+    const pick = await this.pickTaskModel
+      .findOneAndUpdate(
+        { location: params.location, product: params.product, code: params.code },
+        { state: "picking" },
+        { new: true },
+    )
+    .exec();
     console.log(
-      `handlePickOnreDone new palette\n${JSON.stringify(pal, null, 3)}`,
+      `handlePickOneDone new palette parameter\n${JSON.stringify(params, null, 3)}`,
+    );
+    console.log(
+      `handlePickOneDone new palette\n${JSON.stringify(pal, null, 3)}`,
     );
 
     //update pickTasks
-    const pick = await this.pickTaskModel
+    /*const pick = await this.pickTaskModel
       .findOneAndUpdate(
         { code: params.taskCode },
         { palette: pal.barcode, state: 'shipping' },
         { new: true },
       )
-      .exec();
+      .exec();*/
 
     //publish change
     const event = {
       blockId: pick.code,
       time: new Date().toISOString(),
       eventType: 'orderPicked',
-      tags: ['orders', pick.code],
+      tags: ['orders', pick.code, pick.product],
       payload: {
         code: pick.code,
         state: pick.state,
+        address: pick.address,
+        product: pick.product,
       },
     };
 
@@ -280,5 +301,68 @@ export class BuilderService implements OnModuleInit {
 
   async reset() {
     await this.clear();
+  }
+
+  async getProductLocation(name) {
+    /*const productPalettes = await this.paletteModel
+        .find({ product: params.product })
+        .exec();*/
+    const product = await this.pickTaskModel.find({product: name}).exec();
+    let locations: string[] = [];
+      for (const pal of product) {
+        if (pal.location != null) {
+          locations = pal.location;
+        }
+      }
+    return locations;
+  }
+
+  async getProduct(id) {
+    console.log("builderservice WH BE ProduktType param:" + id)
+    const product = await this.pickTaskModel.findOne({code:id}).exec();
+    const productType = product.product;
+    /*let productType: string;
+      for (const pal of product) {
+        if (pal.product != null) {
+          productType = pal.product;
+        }
+      }*/
+      console.log("builderservice WH BE ProduktType:" + productType)
+    return productType;
+  }
+
+  async handleDeliveryDone(params: any) {
+
+    //update pick Task
+    const pick = await this.pickTaskModel
+      .findOneAndUpdate(
+        { location: params.location, product: params.product, code: params.code },
+        { state: "shipping" },
+        { new: true },
+    )
+    .exec();
+    console.log(
+      `handleDeliveryDone new palette parameter\n${JSON.stringify(params, null, 3)}`,
+    );
+    console.log(
+      `handleDeliveryeDone new pickTask\n${JSON.stringify(pick, null, 3)}`,
+    );
+
+    //publish change
+    const event = {
+      blockId: pick.code,
+      time: new Date().toISOString(),
+      eventType: 'orderDelivered',
+      tags: ['orders', pick.code, pick.product],
+      payload: {
+        code: pick.code,
+        state: pick.state,
+        address: pick.address,
+        product: pick.product,
+      },
+    };
+
+    const storeSuccess = await this.store(event);
+    this.publish(event);
   }
 }

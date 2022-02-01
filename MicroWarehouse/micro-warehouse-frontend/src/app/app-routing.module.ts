@@ -5,6 +5,7 @@ import { HomeComponent } from './components/home/home.component';
 import { StoreTasksComponent } from './components/store-tasks/store-tasks.component';
 import { PickTaskComponent } from './components/pick-task/pick-task.component';
 import { EditPickTaskComponent } from './components/edit-pick-task/edit-pick-task.component';
+import { DeliverOrderComponent } from './components/deliver-order/deliver-order.component';
 
 const routes: Routes = [
   {path: 'home/:customer', component: HomeComponent},
@@ -16,6 +17,7 @@ const routes: Routes = [
   {path: 'pick-tasks/edit-offer/:product', component: EditPickTaskComponent },
   {path: 'pick-tasks/pick-tasks/edit-offer/:product', component: EditPickTaskComponent }, //TODO: Why is my pickTasks doppelt?
   {path: '', component: HomeComponent},
+  {path: 'deliver-orders', component: DeliverOrderComponent},
 ];
 
 @NgModule({

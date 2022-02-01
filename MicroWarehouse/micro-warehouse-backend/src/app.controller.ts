@@ -51,11 +51,12 @@ export class AppController {
   }
 
   //https.//localhost:3000/query/palettes
+  //https://localhost:3000/query/orders-name
   @Get('query/:key')
   async getQuery(@Param('key') key: string): Promise<any> {
     //return this.appService.getQuery(key);
 
-    console.log(`appController.getQuery called with key ${key}`);
+    console.log(`appController.getQuery WH BE called with key ${key}`);
     const result: Promise<any> = await this.appService.getQuery(key);
     console.log(
       `appController.getQuery done ${JSON.stringify(result, null, 3)}\n`,
@@ -86,8 +87,19 @@ export class AppController {
   @Post('cmd/pickDone')
   async postPickDOne(@Body() params: any) {
     try {
+      //update ordersModel for Shop FE (http://localhost:4400/home/customerName)
+      /*his.httpService.get<any>('http://localhost:3100/pickingDone/' + params.product)
+        .subscribe(
+          error => console.log("WH BE update SHop FE home order placed to picking failed: " + JSON.stringify(error, null, 3))
+        );*/
+
+
+      console.log(`\n pickingDone update WH BE: ` + JSON.stringify(params.product, null, 3));
       this.logger.log(`\npostPickDone got ${JSON.stringify(params, null, 2)}`)
       const c = await this.appService.handlePickDone(params);
+
+      
+      //console.log(`\n pickingDone update WH BE`);
       return c;
     } catch (error) {
       return error;
@@ -118,5 +130,27 @@ export class AppController {
   @Get('reset')
   async getReset() {
     return await this.appService.getReset();
+  }
+
+  @Post('cmd/deliverDone')
+  async postDeliveryDone(@Body() params: any) {
+    try {
+      //update ordersModel for Shop FE (http://localhost:4400/home/customerName)
+      /*his.httpService.get<any>('http://localhost:3100/pickingDone/' + params.product)
+        .subscribe(
+          error => console.log("WH BE update SHop FE home order placed to picking failed: " + JSON.stringify(error, null, 3))
+        );*/
+
+
+      console.log(`\n DeliveryDone update WH BE: ` + JSON.stringify(params.product, null, 3));
+      this.logger.log(`\npostDeliveryDone got ${JSON.stringify(params, null, 2)}`)
+      const c = await this.appService.handleDeliveryDone(params);
+
+      
+      //console.log(`\n pickingDone update WH BE`);
+      return c;
+    } catch (error) {
+      return error;
+    }
   }
 }

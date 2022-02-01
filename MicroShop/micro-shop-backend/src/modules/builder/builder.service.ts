@@ -242,7 +242,7 @@ export class BuilderService implements OnModuleInit {
             },
             {upsert: true, new: true}).exec()
 
-        //console.log(`placeOrder stored: \n ${JSON.stringify(result, null, 3)}`)
+        //console.log(`placeOrder stored: \n ${JSON.stringify(params.product, null, 3)}`)
 
         await this.customersModel.findOneAndUpdate(
             {name: params.customer},
@@ -260,6 +260,16 @@ export class BuilderService implements OnModuleInit {
             tags: ['products', params.order],
             payload: params,
         };
+
+        const updatedOrder = await this.productsModel.findOneAndUpdate(
+            {product: params.product},
+            {$inc:{amount: -1}},
+            {new: true}
+        ).exec()
+
+        //console.log(`placeOrder stored order update: \n ${JSON.stringify(updatedOrder, null, 3)}`)
+        
+
         await this.storeEvent(event);
         this.publish(event);
     }
@@ -314,6 +324,44 @@ export class BuilderService implements OnModuleInit {
             blockId: order.code,
             time: new Date().toISOString(),
             eventType: 'orderPicked',
+            tags: ['orders', order.code],
+            payload: {
+                code: order.code,
+                product: order.product,
+                address: order.customer + ', ' + order.address,
+                state: order.state
+            }
+        }
+        await this.storeEvent(newEvent);
+        
+        return newEvent;
+    }
+
+    async handleOrderPickedOrdersModel(givenProduct: string) {
+        await this.ordersModel.findOneAndUpdate(
+            {product: givenProduct},
+            {
+                state: "picking"
+            },
+            {new: true}
+        ).exec();
+    }
+
+    async handleOrderDelivered(event: BuildEvent) {
+
+        const params = event.payload;
+        const order = await this.ordersModel.findOneAndUpdate(
+            {code: params.code},
+            {
+                state: params.state
+            },
+            {new: true}
+        ).exec();
+
+        const newEvent = {
+            blockId: order.code,
+            time: new Date().toISOString(),
+            eventType: 'orderDelivered',
             tags: ['orders', order.code],
             payload: {
                 code: order.code,

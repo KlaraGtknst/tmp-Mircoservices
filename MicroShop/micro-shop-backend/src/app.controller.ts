@@ -125,4 +125,13 @@ export class AppController implements OnModuleInit {
       return error;
     }
   }
+
+  //http://localhost:3100/pickingDone/' + params.product
+  @Get('pickingDone/:key')
+  async orderPlacedToPicking(@Param('key') key: string): Promise<any> {
+    const result = await this.appService.handleOrderPickedOrdersModel(key);
+    console.log(
+      `\n pickingDone update`);
+    return result;
+  }
 }

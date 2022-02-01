@@ -1,7 +1,7 @@
 <div class="container">
   <div class="row d-flex justify-content-center my-2">
     <div class="col d-flex justify-content-center">
-      Welcome to Pick Tasks: <br>
+      Welcome to deliver-order: <br>
     </div>
   </div>
 
@@ -18,21 +18,26 @@
     <div class="col-3 d-flex justify-content-center">
       <label>location</label>
     </div>
+    <div class="col-2 d-flex justify-content-center">
+    </div>
   </div>
 
 
-  <a class="row my-2 d-flex justify-content-center" [routerLink]="['pick-tasks/edit-offer', pickTask.code]" *ngFor= "let pickTask of pickTasks"> <!--pickTask.product-->
-    <div class="col-1 d-flex justify-content-center">
-      <label>{{pickTask.product}} </label>
+  <a class="row my-2 d-flex justify-content-center" *ngFor= "let deliverTask of deliverTasks">
+    <div class="col-1 d-flex justify-content-center" >
+      <label>{{deliverTask.product}} </label>
     </div>
     <div class="col-3 d-flex justify-content-center">
-      <label>{{pickTask.state}} </label>
+      <label>{{deliverTask.state}} </label>
     </div>
     <div class="col-3 d-flex justify-content-center">
-      <label>{{pickTask.address}} </label>
+      <label>{{deliverTask.address}} </label>
     </div>
     <div class="col-3 d-flex justify-content-center">
-      <label>{{pickTask.location}} </label>
+      <label>{{deliverTask.location}} </label>
+    </div>
+    <div class="col-2 d-flex justify-content-center">
+        <button class="btn btn-outline-dark" id= "deliver" (click)="deliverOrder(deliverTask)">Deliver</button> <!--"{{deliverTask.address}}{{deliverTask.product}}deliver"-->
     </div>
   </a>
 
