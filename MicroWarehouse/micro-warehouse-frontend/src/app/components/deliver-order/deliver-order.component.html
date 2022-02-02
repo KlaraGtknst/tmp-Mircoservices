@@ -7,39 +7,38 @@
 
   <div class="row d-flex justify-content-center my-2">
     <div class="col-1 d-flex justify-content-center">
-      <label>product</label>
+      <label>product:</label>
     </div>
     <div class="col-3 d-flex justify-content-center">
-      <label>state</label>
+      <label>state:</label>
     </div>
     <div class="col-3 d-flex justify-content-center">
-      <label>customer, address </label>
+      <label>customer, address:</label>
     </div>
     <div class="col-3 d-flex justify-content-center">
-      <label>location</label>
+      <label>location:</label>
     </div>
     <div class="col-2 d-flex justify-content-center">
     </div>
   </div>
 
-
-  <a class="row my-2 d-flex justify-content-center" *ngFor= "let deliverTask of deliverTasks">
-    <div class="col-1 d-flex justify-content-center" >
-      <label>{{deliverTask.product}} </label>
+  <div class="row d-flex justify-content-center my-2" *ngFor= "let deliverTask of deliverTasks">
+    <div class="col-1 d-flex justify-content-center">
+      <label>{{deliverTask.product}}</label>
     </div>
     <div class="col-3 d-flex justify-content-center">
-      <label>{{deliverTask.state}} </label>
+      <label>{{deliverTask.state}}</label>
     </div>
     <div class="col-3 d-flex justify-content-center">
-      <label>{{deliverTask.address}} </label>
+      <label>{{deliverTask.address}}</label>
     </div>
     <div class="col-3 d-flex justify-content-center">
-      <label>{{deliverTask.location}} </label>
+      <label>{{deliverTask.location}}</label>
     </div>
     <div class="col-2 d-flex justify-content-center">
-        <button class="btn btn-outline-dark" id= "deliver" (click)="deliverOrder(deliverTask)">Deliver</button> <!--"{{deliverTask.address}}{{deliverTask.product}}deliver"-->
+      <button class="btn btn-outline-dark" id= "deliver" (click)="deliverOrder(deliverTask)">Deliver</button> <!--"{{deliverTask.address}}{{deliverTask.product}}deliver"-->
     </div>
-  </a>
+  </div>
 
 </div>
 

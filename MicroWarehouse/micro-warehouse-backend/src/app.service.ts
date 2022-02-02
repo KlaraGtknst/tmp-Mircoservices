@@ -16,12 +16,9 @@ export class AppService {
     } else if (key === 'deliveries') {
       const list = await this.modelBuilderService.getDeliveries(key);
       return list;
-    } else if (key.startsWith("orders-")) {
-      const name = key.substring('orders-'.length);
-      return await this.modelBuilderService.getProductLocation(name);
-    } else if (key.startsWith("ordersId-")) {
-      const name = key.substring('ordersId-'.length);
-      return await this.modelBuilderService.getProduct(name);
+    } else if (key.startsWith("orders_")) {
+      const id = key.substring('orders_'.length);
+      return await this.modelBuilderService.getProductTypeAndLocation(id);
     } else {
       const list = await this.modelBuilderService.getByTag(key);
       const answer = {

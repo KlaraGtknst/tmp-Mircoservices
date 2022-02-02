@@ -249,14 +249,17 @@ export class BuilderService implements OnModuleInit {
 
   async handlePickDone(params: any) {
     //update palette
-    const pal = await this.paletteModel
+    //ONLY if state is "order placed", otherwise a product/order will be takn more than once from the WH palettes db
+    //if (params.state === "order placed") {
+      const pal = await this.paletteModel
       .findOneAndUpdate(
         { location: params.location, product: params.product },
         { $inc: { amount: -1 } },
         { new: true },
       )
       .exec();
-
+    //}
+    
     //update pick Task
     const pick = await this.pickTaskModel
       .findOneAndUpdate(
@@ -303,32 +306,20 @@ export class BuilderService implements OnModuleInit {
     await this.clear();
   }
 
-  async getProductLocation(name) {
-    /*const productPalettes = await this.paletteModel
-        .find({ product: params.product })
-        .exec();*/
-    const product = await this.pickTaskModel.find({product: name}).exec();
-    let locations: string[] = [];
-      for (const pal of product) {
-        if (pal.location != null) {
-          locations = pal.location;
-        }
-      }
-    return locations;
-  }
-
-  async getProduct(id) {
-    console.log("builderservice WH BE ProduktType param:" + id)
+  async getProductTypeAndLocation(id) {
+    console.log("builderservice WH BE ProduktType and Location param:" + id)
     const product = await this.pickTaskModel.findOne({code:id}).exec();
     const productType = product.product;
-    /*let productType: string;
-      for (const pal of product) {
-        if (pal.product != null) {
-          productType = pal.product;
-        }
-      }*/
-      console.log("builderservice WH BE ProduktType:" + productType)
-    return productType;
+    const locations = product.location;
+    const state = product.state;
+    console.log("builderservice WH BE ProduktType:" + productType)
+    console.log("builderservice WH BE ProduktLocation:" + locations)
+    const event = {
+      product : productType,
+      location : locations,
+      state : state,
+    }
+    return event;
   }
 
   async handleDeliveryDone(params: any) {

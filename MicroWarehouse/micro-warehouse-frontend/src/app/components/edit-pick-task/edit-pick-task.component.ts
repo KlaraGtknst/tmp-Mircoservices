@@ -16,6 +16,7 @@ export class EditPickTaskComponent implements OnInit {
 
   public product = 'no product';
   public productId = 'no product ID';
+  public state = 'no state';
   public location: String[] = ['no location'];
 
   public formGroup = new FormGroup({
@@ -34,54 +35,21 @@ export class EditPickTaskComponent implements OnInit {
 
   ngOnInit(): void {
     this.route.params.subscribe(params => {
-      //this.product = params['product']
       this.productId = params['product']
 
-      //this.formGroup.get('product')?.setValue(params.product)
-      //this.location = params.location;
       console.log("edit pick tasks WH FE id params " + JSON.stringify(params, null, 3));
 
-      //product type
-      this.http.get<any>('http://localhost:3000/query/ordersId-' + this.productId)
-        .subscribe(
-          answer => {
-            this.product = answer;
-            console.log("edit pick tasks WH FE productType: " + JSON.stringify(answer, null, 3));
-            this.formGroup.get('product')?.setValue(this.product);
-
-            //location
-            this.http.get<any>('http://localhost:3000/query/orders-' + this.product)
+      this.http.get<any>('http://localhost:3000/query/orders_' + this.productId)
               .subscribe(
                 answer => {
-                  console.log("edit pick tasks WH FE location: " + JSON.stringify(params, null, 3));
-                  this.location = answer;},
+                  console.log("edit pick tasks WH FE location: " + JSON.stringify(answer, null, 3));
+                  this.location = answer.location;
+                  this.product = answer.product;
+                  this.state = answer.state;
+                  this.formGroup.get('product')?.setValue(this.product);
+                },
                 error => { console.log("Problem picking: location" + JSON.stringify(error, null, 3));}
-              );
-          },
-          error => {
-            this.product = error.error.text;
-            this.formGroup.get('product')?.setValue(this.product);
-            console.log("Problem picking: product type" + JSON.stringify(error, null, 3));
-
-            //location
-            this.http.get<any>('http://localhost:3000/query/orders-' + this.product)
-              .subscribe(
-                answer => {
-                  console.log("edit pick tasks WH FE location: " + JSON.stringify(params, null, 3));
-                  this.location = answer;},
-                error => { console.log("Problem picking: location" + JSON.stringify(error, null, 3));}
-              );
-          }
-        );
-
-      //location
-      /*this.http.get<any>('http://localhost:3000/query/orders-' + this.product)
-        .subscribe(
-          answer => {
-            console.log("edit pick tasks WH FE location: " + JSON.stringify(params, null, 3));
-            this.location = answer;},
-          error => { console.log("Problem picking: location" + JSON.stringify(error, null, 3));}
-        );*/
+      );
     })
   }
 
@@ -98,6 +66,7 @@ export class EditPickTaskComponent implements OnInit {
       product: this.formGroup.get('product')?.value,
       location: this.formGroup.get('location')?.value,
       code: this.productId,
+      state: this.state,
     }
     this.http.post<any>('http://localhost:3000/cmd/pickDone', params).subscribe(
       () => {

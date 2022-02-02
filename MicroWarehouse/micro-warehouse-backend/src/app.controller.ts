@@ -54,10 +54,11 @@ export class AppController {
   //https://localhost:3000/query/orders-name
   @Get('query/:key')
   async getQuery(@Param('key') key: string): Promise<any> {
-    //return this.appService.getQuery(key);
 
     console.log(`appController.getQuery WH BE called with key ${key}`);
+
     const result: Promise<any> = await this.appService.getQuery(key);
+    
     console.log(
       `appController.getQuery done ${JSON.stringify(result, null, 3)}\n`,
     );
