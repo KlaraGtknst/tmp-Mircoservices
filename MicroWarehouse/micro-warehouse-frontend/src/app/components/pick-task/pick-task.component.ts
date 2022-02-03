@@ -27,6 +27,7 @@ export class PickTaskComponent implements OnInit {
           );
 
     //})
+
     }
 
     handleQueryResponse(answer: any[]) {
