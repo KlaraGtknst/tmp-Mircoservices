@@ -88,12 +88,14 @@ describe('The Shop FrontEnd Test', () => {
   it('A worker in the warehouse prepares that order', () => {
     cy.get('#pick-tasks-button').click()
     cy.contains('Pick Tasks:')
+    cy.get('#accept').click()
     cy.contains('order placed')
     cy.contains('jeans').click()
 
     cy.get('#locationInput').type('shelf 03')
     cy.get('#doneButton').click()
     cy.contains('Pick Tasks:')
+    cy.get('#accept').click()
     cy.contains('picking')
   })
 
@@ -111,9 +113,6 @@ describe('The Shop FrontEnd Test', () => {
     cy.get('#deliver-button-o_001').click()
     //cy.get('#deliver').click()
 
-    //TODO: reload page and check if is empty -> debug or garnicht
-    cy.visit('http://localhost:4200/deliver-orders')
-
   })
 
   //-> check status of order at customer page
@@ -127,6 +126,7 @@ describe('The Shop FrontEnd Test', () => {
   it('checks if pickTasks page is informed about the shipping', () => {
     cy.visit('http://localhost:4200/pick-tasks')
     cy.contains('Pick Tasks:')
+    cy.get('#accept').click()
     cy.contains('shipping')
   })
 
