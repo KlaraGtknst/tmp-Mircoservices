@@ -18,7 +18,9 @@ export class DeliverOrderComponent implements OnInit {
   ngOnInit(): void {
       this.http.get<any>('http://localhost:3000/query/deliveries' )
         .subscribe(
-          answer => this.handleQueryResponse(answer),
+          answer => {
+            this.handleQueryResponse(answer);
+          },
           error => this.debugString = JSON.stringify(error)
         );
     }
@@ -36,6 +38,7 @@ export class DeliverOrderComponent implements OnInit {
       this.http.post<any>('http://localhost:3000/cmd/deliverDone', deliverTask).subscribe(
       () => {
         console.log("Delivery Done (WH FW deliver-order Component): " + JSON.stringify(deliverTask, null, 3));
+        window.location.reload();
       },
       (error) => {
         console.log("Delivery Problem (WH FW deliver-order Component): " + JSON.stringify(error, null, 3));

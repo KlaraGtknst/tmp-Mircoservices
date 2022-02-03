@@ -15,7 +15,7 @@ const routes: Routes = [
   {path: 'pick-tasks', component: PickTaskComponent},
   {path: 'pick-tasks/edit-offer', component: EditPickTaskComponent },
   {path: 'pick-tasks/edit-offer/:product', component: EditPickTaskComponent },
-  {path: 'pick-tasks/pick-tasks/edit-offer/:product', component: EditPickTaskComponent }, //TODO: Why is my pickTasks doppelt?
+  //{path: 'pick-tasks/pick-tasks/edit-offer/:product', component: EditPickTaskComponent }, //TODO: Why is my pickTasks doppelt?
   {path: '', component: HomeComponent},
   {path: 'deliver-orders', component: DeliverOrderComponent},
 ];

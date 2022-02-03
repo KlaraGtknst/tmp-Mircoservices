@@ -39,7 +39,7 @@ import { DeliverOrderModule } from './components/deliver-order/deliver-order.mod
     ReactiveFormsModule,
     DeliverOrderModule,
     //ToastModule,
-    NgbModule
+    NgbModule,
   ],
   providers: [],
   bootstrap: [AppComponent]

@@ -18,8 +18,9 @@ export class PickTaskComponent implements OnInit {
 
   ngOnInit(): void {
     //this.route.params.subscribe(params => {
+      //cb values bleibt gleich
 
-        this.http.get<any>('http://localhost:3000/query/orders' )//has no location at Shop, look at warehouse palettes
+        this.http.get<any>('http://localhost:3000/query/orders' )//has no location at Shop, look at warehouse picktasks db
           .subscribe(
             answer => this.handleQueryResponse(answer),
             error => this.debugString = JSON.stringify(error)
@@ -29,9 +30,18 @@ export class PickTaskComponent implements OnInit {
     }
 
     handleQueryResponse(answer: any[]) {
-      this.pickTasks = [];
+      this.pickTasks = []
+      const allKindOfOrders = document.querySelector('#accept:checked') !== null;
+      console.log("Picktask WH FE: ", allKindOfOrders);
       for (const task of answer) {
+        if(allKindOfOrders) {
           this.pickTasks.push(task);
+        } else {
+          if(task.state === "order placed") {
+            this.pickTasks.push(task);
+          }
+        }
+
       }
       this.debugString = `number of offers ${this.pickTasks.length}`
       console.log(JSON.stringify(this.pickTasks, null, 3));

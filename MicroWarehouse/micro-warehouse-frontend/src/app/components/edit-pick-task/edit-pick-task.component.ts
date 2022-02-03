@@ -21,7 +21,7 @@ export class EditPickTaskComponent implements OnInit {
 
   public formGroup = new FormGroup({
     product: new FormControl('', [Validators.required]),
-    location: new FormControl('', [Validators.required]), //TODO:, this.productLocationValidator()]),
+    location: new FormControl('', [Validators.required, this.productLocationValidator()]),
   })
 
   constructor(

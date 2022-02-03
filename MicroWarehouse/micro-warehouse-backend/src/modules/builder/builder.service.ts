@@ -4,7 +4,7 @@ import { Injectable, OnModuleInit } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { BuildEvent } from './build-event.schema';
-import { Palette } from './palette.schema';
+import { Palette, PaletteSchema } from './palette.schema';
 import { PickTask } from './pick-task.schema';
 import Subscription from './subscription';
 
@@ -191,7 +191,7 @@ export class BuilderService implements OnModuleInit {
     if (storeSuccess) {
       const params = event.payload;
       //Added
-      this.storeModelPalette(params);
+      //this.storeModelPalette(params);
       /*palette.amount = Number(palette.amount)
       const event = {
         blockId: palette.barcode,
@@ -320,6 +320,14 @@ export class BuilderService implements OnModuleInit {
       state : state,
     }
     return event;
+  }
+
+  async getPalettes() {
+    const palettes = await this.paletteModel
+    .find({ })
+    .exec();
+
+    return await palettes;
   }
 
   async handleDeliveryDone(params: any) {

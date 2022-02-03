@@ -108,10 +108,10 @@ describe('The Shop FrontEnd Test', () => {
   //http://localhost:4200/deliver-orders
   it('A delivery person takes the prepared order', () => {
     cy.visit('http://localhost:4200/deliver-orders')
-    //cy.get('#Carli, Wonderland 1jeansdeliver').click()
-    cy.get('#deliver').click()
+    cy.get('#deliver-button-o_001').click()
+    //cy.get('#deliver').click()
 
-    //TODO: reload page and check if is empty
+    //TODO: reload page and check if is empty -> debug or garnicht
     cy.visit('http://localhost:4200/deliver-orders')
 
   })

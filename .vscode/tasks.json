@@ -1,0 +1,52 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+      {
+        "label": "Run everything",
+        "dependsOn": [
+            "MW FE",
+            "MW BE",
+            "MS FE",
+            "MS BE",
+            "cypress"
+        ],
+        "isBackground": true,
+        "problemMatcher": []
+      },
+      {
+        "label": "MW FE",
+        "type": "shell",
+        "command": "cd .\\MicroWarehouse\\micro-warehouse-frontend\\; npm run start",
+        "isBackground": true,
+        "problemMatcher": []
+      },
+      {
+        "label": "MW BE",
+        "type": "shell",
+        "command": "cd .\\MicroWarehouse\\micro-warehouse-backend\\; npm start",
+        "isBackground": true,
+        "problemMatcher": []
+      },
+      {
+        "label": "MS FE",
+        "type": "shell",
+        "command": "cd .\\MicroShop\\micro-shop-frontend\\; npm run start",
+        "isBackground": true,
+        "problemMatcher": []
+      },
+      {
+        "label": "MS BE",
+        "type": "shell",
+        "command": "cd .\\MicroShop\\micro-shop-backend\\; npm start",
+        "isBackground": true,
+        "problemMatcher": []
+      },
+      {
+        "label": "cypress",
+        "type": "shell",
+        "command": "cd .\\MicroTests\\; npm run cypress",
+        "isBackground": true,
+        "problemMatcher": []
+      }
+    ]
+  }

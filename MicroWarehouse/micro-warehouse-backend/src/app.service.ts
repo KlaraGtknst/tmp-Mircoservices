@@ -19,6 +19,8 @@ export class AppService {
     } else if (key.startsWith("orders_")) {
       const id = key.substring('orders_'.length);
       return await this.modelBuilderService.getProductTypeAndLocation(id);
+    } else if (key === 'palettes') { 
+      return await this.modelBuilderService.getPalettes()
     } else {
       const list = await this.modelBuilderService.getByTag(key);
       const answer = {

@@ -3,6 +3,10 @@
     <div class="col d-flex justify-content-center">
       Welcome to Pick Tasks: <br>
     </div>
+    <label for="accept">
+      <input type="checkbox" id="accept" name="accept" value="yes" (click)="ngOnInit()"> All kinds of orders
+    </label>
+
   </div>
 
   <div class="row d-flex justify-content-center my-2">
@@ -24,9 +28,9 @@
   </div>
 
 
-  <a class="row my-2 d-flex justify-content-center" [routerLink]="['pick-tasks/edit-offer', pickTask.code]" *ngFor= "let pickTask of pickTasks"> <!--pickTask.product-->
+  <a class="row my-2 d-flex justify-content-center" [routerLink]="['/pick-tasks/edit-offer', pickTask.code]" *ngFor= "let pickTask of pickTasks"> <!--pickTask.product-->
     <div class="col-2 d-flex justify-content-center">
-      <font size="1"><label>{{pickTask.code}} </label></font>
+      <font size="1"><label>{{pickTask.code}} </label></font> <!--keine Striche, weil Groeße zu klein-->
     </div>
     <div class="col-1 d-flex justify-content-center">
       <label>{{pickTask.product}} </label>
