@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { AbstractControl, FormControl, FormGroup, ValidationErrors, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
+import { environment } from 'src/environments/environment.prod';
 //import { ToastService } from 'ng-bootstrap-ext';
 //import { ToastService } from 'ng-bootstrap-ext';
 
@@ -39,7 +40,7 @@ export class EditPickTaskComponent implements OnInit {
 
       console.log("edit pick tasks WH FE id params " + JSON.stringify(params, null, 3));
 
-      this.http.get<any>('http://localhost:3000/query/orders_' + this.productId)
+      this.http.get<any>(environment.baseurl + 'query/orders_' + this.productId) //http://localhost:3000/
               .subscribe(
                 answer => {
                   console.log("edit pick tasks WH FE location: " + JSON.stringify(answer, null, 3));
@@ -68,7 +69,7 @@ export class EditPickTaskComponent implements OnInit {
       code: this.productId,
       state: this.state,
     }
-    this.http.post<any>('http://localhost:3000/cmd/pickDone', params).subscribe(
+    this.http.post<any>(environment.baseurl + 'cmd/pickDone', params).subscribe( //http://localhost:3000/
       () => {
         //this.toastService.success('PickOrder', 'Edit Pick submitted successfully !!!');
         console.log("Successfull picking");

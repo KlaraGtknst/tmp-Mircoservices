@@ -1,5 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit, SystemJsNgModuleLoader } from '@angular/core';
+import { environment } from 'src/environments/environment.prod';
 
 //http://localhost:4200/deliver-orders
 @Component({
@@ -16,7 +17,7 @@ export class DeliverOrderComponent implements OnInit {
   public debugString : String = "Hello on pickTasks";
 
   ngOnInit(): void {
-      this.http.get<any>('http://localhost:3000/query/deliveries' )
+      this.http.get<any>(environment.baseurl + 'query/deliveries' ) //http://localhost:3000/
         .subscribe(
           answer => {
             this.handleQueryResponse(answer);
@@ -35,7 +36,7 @@ export class DeliverOrderComponent implements OnInit {
     }
 
     deliverOrder(deliverTask : any) {
-      this.http.post<any>('http://localhost:3000/cmd/deliverDone', deliverTask).subscribe(
+      this.http.post<any>(environment.baseurl + 'cmd/deliverDone', deliverTask).subscribe( //http://localhost:3000/
       () => {
         console.log("Delivery Done (WH FW deliver-order Component): " + JSON.stringify(deliverTask, null, 3));
         window.location.reload();

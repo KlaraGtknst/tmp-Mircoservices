@@ -3,6 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { AbstractControl, FormControl, FormGroup, ValidationErrors, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ProductDto } from 'common/ProductDto';
+import { environment } from 'environments/environment.prod';
 import { ToastService } from 'ng-bootstrap-ext';
 
 @Component({
@@ -18,7 +19,7 @@ export class EditOfferComponent implements OnInit {
     ) { }
 
   ngOnInit(): void {
-    this.http.get<any>('http://localhost:3100/query/products')
+    this.http.get<any>(environment.baseurl + 'query/products') //http://localhost:3100/
     .subscribe(
       answer => this.handleQueryResponse(answer),
       error => this.debugOut = JSON.stringify(error, null, 3)
@@ -66,7 +67,7 @@ export class EditOfferComponent implements OnInit {
       price: Number(this.formGroup.get('productPrice')?.value),
     }
     console.log(this.debugOut);
-    this.http.post<any>('http://localhost:3100/cmd/setPrice', params).subscribe(
+    this.http.post<any>(environment.baseurl + 'cmd/setPrice', params).subscribe( //http://localhost:3100/
       () => {
         this.toastService.success('Edit Offer', 'Price has been stored successfully !!!');
         this.router.navigate(['offer-tasks']);

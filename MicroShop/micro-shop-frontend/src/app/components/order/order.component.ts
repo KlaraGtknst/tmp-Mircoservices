@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
+import { environment } from 'environments/environment.prod';
 import { ToastService } from 'ng-bootstrap-ext';
 import { v4 as uuidv4 } from 'uuid';
 
@@ -46,7 +47,7 @@ export class OrderComponent implements OnInit {
       customer: this.formGroup.get('customer')?.value,
       address: this.formGroup.get('address')?.value,
     }
-    this.http.post<any>('http://localhost:3100/cmd/placeOrder', params).subscribe(
+    this.http.post<any>(environment.baseurl + 'cmd/placeOrder', params).subscribe( //http://localhost:3100/
       () => {
         this.toastService.success('Order', 'order submitted successfully !!!');
         this.router.navigate(['home', this.formGroup.get('customer')?.value]);

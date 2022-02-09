@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import {Router} from '@angular/router'
+import { environment } from 'src/environments/environment.prod';
 
 
 @Component({
@@ -35,7 +36,7 @@ export class AddPaletteComponent implements OnInit {
     }
 
     try {
-      this.http.post<any>('http://localhost:3000/cmd', newCmd).subscribe(
+      this.http.post<any>(environment.baseurl + 'cmd', newCmd).subscribe( //http://localhost:3000/
         () => {this.router.navigate(['/store-tasks']);}
       )
       /*const response = await this.http.post<any>('http://localhost:3000/cmd', newCmd).toPromise();

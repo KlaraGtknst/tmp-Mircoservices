@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { environment } from 'environments/environment.prod';
 
 @Component({
   selector: 'app-home',
@@ -22,7 +23,7 @@ export class HomeComponent implements OnInit {
     this.route.params.subscribe(params => {
       if(params['customer']) {
         this.customer = params['customer']
-        this.http.get<any>('http://localhost:3100/query/orders_' + this.customer)
+        this.http.get<any>(environment.baseurl + 'query/orders_' + this.customer) //http://localhost:3100/
           .subscribe(
             answer => this.handleOrderList(answer),
             error => this.debugString = JSON.stringify(error)
@@ -30,7 +31,7 @@ export class HomeComponent implements OnInit {
       }
     })
 
-    this.http.get<any>('http://localhost:3100/query/products')
+    this.http.get<any>(environment.baseurl + 'query/products') //http://localhost:3100/
     .subscribe(
       answer => this.handleQueryResponse(answer),
       error => this.debugString = JSON.stringify(error, null, 3)

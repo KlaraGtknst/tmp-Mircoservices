@@ -1,5 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
+import { environment } from 'src/environments/environment.prod';
 
 @Component({
   selector: 'app-store-tasks',
@@ -15,7 +16,7 @@ export class StoreTasksComponent implements OnInit {
   storeTaskString = "Initiale Message";
 
   async ngOnInit(){
-    this.http.get<any>('http://localhost:3000/query/palettes')
+    this.http.get<any>(environment.baseurl + 'query/palettes') //http://localhost:3000/
       .subscribe(
         answer => {this.handleQueryResponse(answer)},
         error => {this.storeTaskString = JSON.stringify(error, null, 3)}

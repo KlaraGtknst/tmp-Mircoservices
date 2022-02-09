@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit, SystemJsNgModuleLoader } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { environment } from 'src/environments/environment.prod';
 
 @Component({
   selector: 'app-pick-task',
@@ -20,7 +21,7 @@ export class PickTaskComponent implements OnInit {
     //this.route.params.subscribe(params => {
       //cb values bleibt gleich
 
-        this.http.get<any>('http://localhost:3000/query/orders' )//has no location at Shop, look at warehouse picktasks db
+        this.http.get<any>(environment.baseurl + 'query/orders' )//http://localhost:3000/
           .subscribe(
             answer => this.handleQueryResponse(answer),
             error => this.debugString = JSON.stringify(error)
