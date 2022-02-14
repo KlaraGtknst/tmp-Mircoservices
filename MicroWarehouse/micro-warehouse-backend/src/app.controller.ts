@@ -9,11 +9,19 @@ import { BuildEvent } from './modules/builder/build-event.schema';
 @Controller()
 export class AppController {
   private logger = new Logger(AppController.name);
+  public port = process.env.PORT || 3000;
+  public shopUrl = "http://localhost:3100/";
+  public warehouseUrl = "http://localhost:3000/";
 
   constructor(
     private readonly appService: AppService,
     private httpService: HttpService,
-  ) {}
+  ) {
+    if (this.port != 3000) {
+      this.shopUrl = "https://klaragtknst-shop-backend.herokuapp.com/"
+      this.warehouseUrl = "https://klaragtknst-warehouse-backend.herokuapp.com/"
+    }
+  }
 
   onModuleInit() {
     //subscribe at shop
@@ -23,8 +31,8 @@ export class AppController {
   private subscribeAtMicroShop(isReturnSubscriptionVal: boolean) {
     //subscribe at shop
     this.httpService
-      .post('http://localhost:3100/subscribe', {
-        subscriberUrl: 'http://localhost:3000/event',
+      .post(this.shopUrl + 'subscribe', {  //http://localhost:3100/subscribe
+        subscriberUrl: this.warehouseUrl + 'event', //http://localhost:3000/event
         lastEventTime: '0',
         isReturnSubscription: isReturnSubscriptionVal,
       })

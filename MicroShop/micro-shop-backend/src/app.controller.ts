@@ -16,10 +16,20 @@ import Subscription from './modules/builder/subscription';
 
 @Controller()
 export class AppController implements OnModuleInit {
+
+  public port = process.env.PORT || 3100;
+  public shopUrl = "http://localhost:3100/";
+  public warehouseUrl = "http://localhost:3000/";
+
   constructor(
     private readonly appService: AppService,
     private httpService: HttpService,
-  ) {}
+  ) {
+    if (this.port != 3100) {
+      this.shopUrl = "https://klaragtknst-shop-backend.herokuapp.com/"
+      this.warehouseUrl = "https://klaragtknst-warehouse-backend.herokuapp.com/"
+    }
+  }
 
   onModuleInit() {
     //subscribe at warehouse
@@ -29,8 +39,8 @@ export class AppController implements OnModuleInit {
   private subscribeAtWarehouse(isReturnSubscriptionVal: boolean) {
     //subscribe at warehouse
     this.httpService
-      .post('http://localhost:3000/subscribe', {
-        subscriberUrl: 'http://localhost:3100/event',
+      .post(this.warehouseUrl + 'subscribe', {  //http://localhost:3000/subscribe
+        subscriberUrl: this.shopUrl + 'event', //http://localhost:3100/event
         lastEventTime: '0',
         isReturnSubscription: isReturnSubscriptionVal,
       })

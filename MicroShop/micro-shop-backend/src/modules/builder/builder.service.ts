@@ -26,7 +26,7 @@ export class BuilderService implements OnModuleInit {
       ) {}
 
     async onModuleInit() {
-        await this.reset();
+        //await this.reset();
     }
 
     async clear() {
@@ -36,7 +36,7 @@ export class BuilderService implements OnModuleInit {
         await this.customersModel.deleteMany();
 
         //dummy data, delete later, necessary for edit-offer
-        this.storeProduct({
+        /*this.storeProduct({
             product: 'jeans',
             amount: 10,
             amountTime: '12:00',
@@ -53,7 +53,7 @@ export class BuilderService implements OnModuleInit {
             amount: 12,
             amountTime: '12:02',
             price: 0.0,
-        })
+        })*/
     }
 
     async reset() {
