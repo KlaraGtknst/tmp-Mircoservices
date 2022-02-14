@@ -10,7 +10,6 @@ import { SetPriceDto } from 'src/common/SetPriceDto';
 import { HttpService } from '@nestjs/axios';
 import Subscription from './subscription';
 import { PlaceOrderDto } from 'src/common/PlaceOrderDto';
-//import { publish } from 'rxjs';
 
 @Injectable()
 export class BuilderService implements OnModuleInit {
@@ -35,25 +34,6 @@ export class BuilderService implements OnModuleInit {
         await this.ordersModel.deleteMany();
         await this.customersModel.deleteMany();
 
-        //dummy data, delete later, necessary for edit-offer
-        /*this.storeProduct({
-            product: 'jeans',
-            amount: 10,
-            amountTime: '12:00',
-            price: 0.0,
-        })
-        this.storeProduct({
-            product: 'tshirt',
-            amount: 11,
-            amountTime: '12:01',
-            price: 0.0,
-        })
-        this.storeProduct({
-            product: 'socks',
-            amount: 12,
-            amountTime: '12:02',
-            price: 0.0,
-        })*/
     }
 
     async reset() {
@@ -61,7 +41,7 @@ export class BuilderService implements OnModuleInit {
     }
 
     async getByTag(tag: string) {
-        console.log('getByTag called with ' + tag);
+        //console.log('getByTag called with ' + tag);
         const list = await this.productsModel.find({ tags: tag }).exec();
         return list;
     }
@@ -95,7 +75,7 @@ export class BuilderService implements OnModuleInit {
                 {product: newProductData.product},
                 newProductData,
                 {upsert: true, new: true}).exec();
-            console.log('BuilderService.storeProduct storeProduct: \n' + JSON.stringify(newProduct, null, 3));
+            //console.log('BuilderService.storeProduct storeProduct: \n' + JSON.stringify(newProduct, null, 3));
             return newProduct;
         } catch(error) {
             console.log('Error in BuilderService.storeProduct: \n' + JSON.stringify(error, null, 3));
@@ -120,7 +100,7 @@ export class BuilderService implements OnModuleInit {
                 },
                 { new: true}
             ).exec();
-            console.log('builder service storeEvent line 95\n' + JSON.stringify(newEvent, null, 3));
+            //console.log('builder service storeEvent line 95\n' + JSON.stringify(newEvent, null, 3));
 
             return newEvent != null;
     }
@@ -281,7 +261,7 @@ export class BuilderService implements OnModuleInit {
         for (const url of oldUrls) {
             this.httpService.post(url, newEvent).subscribe(
                 (response) => {
-                    console.log(response)
+                    //console.log(response)
                     this.subscriberUrls.push(url)
                 },
                 (error) => {

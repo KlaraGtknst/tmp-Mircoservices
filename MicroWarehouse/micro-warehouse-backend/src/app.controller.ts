@@ -43,7 +43,7 @@ export class AppController {
           for (const event of eventList) {
             await this.appService.handleEvent(event);
           }
-          console.log("WAREHOUSE subscribed at SHOP");
+          //console.log("WAREHOUSE subscribed at SHOP");
         } catch (error) {
           console.log(
             'Warehouse: AppController onModuleInit subscribe handleEvent error' +
@@ -63,20 +63,20 @@ export class AppController {
   @Get('query/:key')
   async getQuery(@Param('key') key: string): Promise<any> {
 
-    console.log(`appController.getQuery WH BE called with key ${key}`);
+    //console.log(`appController.getQuery WH BE called with key ${key}`);
 
     const result: Promise<any> = await this.appService.getQuery(key);
     
-    console.log(
+    /*console.log(
       `appController.getQuery done ${JSON.stringify(result, null, 3)}\n`,
-    );
+    );*/
     return result;
   }
 
   @Post('cmd')
   async postCommand(@Body() command: Command) {
     try {
-      console.log(`got command ${JSON.stringify(command, null, 3)}`);
+      //console.log(`got command ${JSON.stringify(command, null, 3)}`);
       const c = await this.appService.handleCommand(command);
       return c;
     } catch (error) {
@@ -103,8 +103,8 @@ export class AppController {
         );*/
 
 
-      console.log(`\n pickingDone update WH BE: ` + JSON.stringify(params.product, null, 3));
-      this.logger.log(`\npostPickDone got ${JSON.stringify(params, null, 2)}`)
+      //console.log(`\n pickingDone update WH BE: ` + JSON.stringify(params.product, null, 3));
+      //this.logger.log(`\npostPickDone got ${JSON.stringify(params, null, 2)}`)
       const c = await this.appService.handlePickDone(params);
 
       
@@ -151,8 +151,8 @@ export class AppController {
         );*/
 
 
-      console.log(`\n DeliveryDone update WH BE: ` + JSON.stringify(params.product, null, 3));
-      this.logger.log(`\npostDeliveryDone got ${JSON.stringify(params, null, 2)}`)
+      //console.log(`\n DeliveryDone update WH BE: ` + JSON.stringify(params.product, null, 3));
+      //this.logger.log(`\npostDeliveryDone got ${JSON.stringify(params, null, 2)}`)
       const c = await this.appService.handleDeliveryDone(params);
 
       

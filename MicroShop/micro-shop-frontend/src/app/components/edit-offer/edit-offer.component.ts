@@ -35,7 +35,7 @@ export class EditOfferComponent implements OnInit {
   }
 
   //Platzhalter, wird handleQueryResponse(.) hinzugefügt
-  validNames: string[] = ['jeans', 'tshirt'];
+  validNames: string[] = [];
 
   formGroup = new FormGroup({
     productName: new FormControl('', [Validators.required, this.productNameValidator()]),
@@ -61,12 +61,12 @@ export class EditOfferComponent implements OnInit {
 
   submitOffer() {
     this.debugOut = `Your input is ${this.formGroup.get('productName')?.value} and its price is ${this.formGroup.get('productPrice')?.value}`;
-    console.log(this.debugOut);
+    //console.log(this.debugOut);
     const params = {
       product: this.formGroup.get('productName')?.value,
       price: Number(this.formGroup.get('productPrice')?.value),
     }
-    console.log(this.debugOut);
+    //console.log(this.debugOut);
     this.http.post<any>(environment.baseurl + 'cmd/setPrice', params).subscribe( //http://localhost:3100/
       () => {
         this.toastService.success('Edit Offer', 'Price has been stored successfully !!!');

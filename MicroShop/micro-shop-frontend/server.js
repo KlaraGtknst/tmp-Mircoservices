@@ -11,5 +11,5 @@ server.get('/*', async (req, res) => {
     res.sendFile(path.resolve(__dirname, 'dist', 'micro-shop-frontend', 'index.html'));
 });
 
-const port = process.env.PORT || 3100; //3001
+const port = process.env.PORT || 4400; //3001
 server.listen(port, () => console.log('App Running on port ' + port));

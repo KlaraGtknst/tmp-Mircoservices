@@ -38,12 +38,12 @@ export class EditPickTaskComponent implements OnInit {
     this.route.params.subscribe(params => {
       this.productId = params['product']
 
-      console.log("edit pick tasks WH FE id params " + JSON.stringify(params, null, 3));
+      //console.log("edit pick tasks WH FE id params " + JSON.stringify(params, null, 3));
 
       this.http.get<any>(environment.baseurl + 'query/orders_' + this.productId) //http://localhost:3000/
               .subscribe(
                 answer => {
-                  console.log("edit pick tasks WH FE location: " + JSON.stringify(answer, null, 3));
+                  //console.log("edit pick tasks WH FE location: " + JSON.stringify(answer, null, 3));
                   this.location = answer.location;
                   this.product = answer.product;
                   this.state = answer.state;
@@ -72,7 +72,7 @@ export class EditPickTaskComponent implements OnInit {
     this.http.post<any>(environment.baseurl + 'cmd/pickDone', params).subscribe( //http://localhost:3000/
       () => {
         //this.toastService.success('PickOrder', 'Edit Pick submitted successfully !!!');
-        console.log("Successfull picking");
+        //console.log("Successfull picking");
         this.router.navigate(['pick-tasks']);
       },
       (error) => {

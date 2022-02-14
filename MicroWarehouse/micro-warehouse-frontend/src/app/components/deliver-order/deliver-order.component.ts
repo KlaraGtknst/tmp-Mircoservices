@@ -32,13 +32,13 @@ export class DeliverOrderComponent implements OnInit {
           this.deliverTasks.push(task);
       }
       this.debugString = `number of offers ${this.deliverTasks.length}`
-      console.log(JSON.stringify(this.deliverTasks, null, 3));
+      //console.log(JSON.stringify(this.deliverTasks, null, 3));
     }
 
     deliverOrder(deliverTask : any) {
       this.http.post<any>(environment.baseurl + 'cmd/deliverDone', deliverTask).subscribe( //http://localhost:3000/
       () => {
-        console.log("Delivery Done (WH FW deliver-order Component): " + JSON.stringify(deliverTask, null, 3));
+        //console.log("Delivery Done (WH FW deliver-order Component): " + JSON.stringify(deliverTask, null, 3));
         window.location.reload();
       },
       (error) => {

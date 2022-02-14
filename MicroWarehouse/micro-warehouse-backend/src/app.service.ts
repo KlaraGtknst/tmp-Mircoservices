@@ -50,11 +50,10 @@ export class AppService {
 
   async handleEvent(event: BuildEvent) {
     if (event.eventType === 'productOrdered') {
-      //TODO: event hat keine Location
-      console.log(
+      /*console.log(
         'Warehouse app service handle event gets \n' +
           JSON.stringify(event, null, 3),
-      );
+      );*/
       return await this.modelBuilderService.handleProductOrdered(event);
     } else {
       return {

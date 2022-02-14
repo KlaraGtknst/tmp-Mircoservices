@@ -34,7 +34,7 @@ export class PickTaskComponent implements OnInit {
     handleQueryResponse(answer: any[]) {
       this.pickTasks = []
       const allKindOfOrders = document.querySelector('#accept:checked') !== null;
-      console.log("Picktask WH FE: ", allKindOfOrders);
+      //console.log("Picktask WH FE: ", allKindOfOrders);
       for (const task of answer) {
         if(allKindOfOrders) {
           this.pickTasks.push(task);
@@ -46,7 +46,7 @@ export class PickTaskComponent implements OnInit {
 
       }
       this.debugString = `number of offers ${this.pickTasks.length}`
-      console.log(JSON.stringify(this.pickTasks, null, 3));
+      //console.log(JSON.stringify(this.pickTasks, null, 3));
     }
 
   }

@@ -51,7 +51,7 @@ export class AppController implements OnModuleInit {
           for (const event of eventList) {
             await this.appService.handleEvent(event);
           }
-          console.log("SHOP subscribed at WAREHOUSE");
+          //console.log("SHOP subscribed at WAREHOUSE");
         } catch (error) {
           console.log(
             'Shop: AppController onModuleInit subscribe handleEvent error' +
@@ -140,8 +140,7 @@ export class AppController implements OnModuleInit {
   @Get('pickingDone/:key')
   async orderPlacedToPicking(@Param('key') key: string): Promise<any> {
     const result = await this.appService.handleOrderPickedOrdersModel(key);
-    console.log(
-      `\n pickingDone update`);
+    //console.log(`\n pickingDone update`);
     return result;
   }
 }

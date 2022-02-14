@@ -24,12 +24,12 @@ export class StoreTasksComponent implements OnInit {
   }
 
   handleQueryResponse(answer: any) {
-    console.log('there is some data')
+    //console.log('there is some data')
     for (const e of answer) {//answer.result) {
       this.palettes.push(e); //.payload);
     }
     this.storeTaskString = `/query/palettes response contains ${this.palettes.length} palettes`
-    console.log(this.storeTaskString)
+    //console.log(this.storeTaskString)
   }
 
 }

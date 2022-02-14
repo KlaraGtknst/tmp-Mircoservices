@@ -225,7 +225,7 @@ export class BuilderService implements OnModuleInit {
         'BuilderService WH BE locations: ' + JSON.stringify(locations, null, 3),
       );*/
       const pickTask = {
-        code: params.order, //TODO: warum Filter order statt code???
+        code: params.order,
         product: params.product,
         address: params.customer + ', ' + params.address,
         location: locations,
@@ -268,12 +268,12 @@ export class BuilderService implements OnModuleInit {
         { new: true },
     )
     .exec();
-    console.log(
+    /*console.log(
       `handlePickOneDone new palette parameter\n${JSON.stringify(params, null, 3)}`,
     );
     console.log(
       `handlePickOneDone new palette\n${JSON.stringify(pal, null, 3)}`,
-    );
+    );*/
 
     //update pickTasks
     /*const pick = await this.pickTaskModel
@@ -307,13 +307,13 @@ export class BuilderService implements OnModuleInit {
   }
 
   async getProductTypeAndLocation(id) {
-    console.log("builderservice WH BE ProduktType and Location param:" + id)
+    //console.log("builderservice WH BE ProduktType and Location param:" + id)
     const product = await this.pickTaskModel.findOne({code:id}).exec();
     const productType = product.product;
     const locations = product.location;
     const state = product.state;
-    console.log("builderservice WH BE ProduktType:" + productType)
-    console.log("builderservice WH BE ProduktLocation:" + locations)
+    /*console.log("builderservice WH BE ProduktType:" + productType)
+    console.log("builderservice WH BE ProduktLocation:" + locations)*/
     const event = {
       product : productType,
       location : locations,
@@ -340,12 +340,12 @@ export class BuilderService implements OnModuleInit {
         { new: true },
     )
     .exec();
-    console.log(
+    /*console.log(
       `handleDeliveryDone new palette parameter\n${JSON.stringify(params, null, 3)}`,
     );
     console.log(
       `handleDeliveryeDone new pickTask\n${JSON.stringify(pick, null, 3)}`,
-    );
+    );*/
 
     //publish change
     const event = {

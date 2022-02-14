@@ -18,7 +18,7 @@ export class OfferTasksComponent implements OnInit {
 
   ngOnInit(): void {
 
-    this.offers.push({
+    /*this.offers.push({
       product: "jeans",
       state: "in stock",
       amount: 6,
@@ -29,7 +29,7 @@ export class OfferTasksComponent implements OnInit {
       state: "in stock",
       amount: 7,
       price: 0.0,
-    });
+    });*/
 
     this.storeTasksString = `number of offers ${this.offers.length}`
 
