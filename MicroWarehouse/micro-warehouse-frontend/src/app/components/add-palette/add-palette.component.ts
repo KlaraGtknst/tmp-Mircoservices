@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import {Router} from '@angular/router'
-import { environment } from 'src/environments/environment.prod';
+import { environment } from 'src/environments/environment';
 
 
 @Component({
@@ -36,6 +36,7 @@ export class AddPaletteComponent implements OnInit {
     }
 
     try {
+      console.log(`post has been send to ${JSON.stringify(environment.baseurl, null, 3)}`);
       this.http.post<any>(environment.baseurl + 'cmd', newCmd).subscribe( //http://localhost:3000/
         () => {this.router.navigate(['/store-tasks']);}
       )

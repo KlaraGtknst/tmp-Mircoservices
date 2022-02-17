@@ -20,7 +20,7 @@ export class BuilderService implements OnModuleInit {
   ) {}
 
   async onModuleInit() {
-    await this.clear();
+    //await this.clear();
   }
 
   getByTag(tag: string) {

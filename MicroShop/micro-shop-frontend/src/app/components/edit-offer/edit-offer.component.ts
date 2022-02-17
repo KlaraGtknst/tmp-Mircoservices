@@ -3,7 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { AbstractControl, FormControl, FormGroup, ValidationErrors, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ProductDto } from 'common/ProductDto';
-import { environment } from 'environments/environment.prod';
+import { environment } from 'environments/environment';
 import { ToastService } from 'ng-bootstrap-ext';
 
 @Component({

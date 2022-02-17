@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { environment } from 'environments/environment.prod';
+import { environment } from 'environments/environment';
 import { ToastService } from 'ng-bootstrap-ext';
 import { v4 as uuidv4 } from 'uuid';
 

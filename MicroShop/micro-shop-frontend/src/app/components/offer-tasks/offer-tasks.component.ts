@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { ProductDto } from 'common/ProductDto';
-import { environment } from 'environments/environment.prod';
+import { environment } from 'environments/environment';
 
 @Component({
   selector: 'app-offer-tasks',

@@ -4,6 +4,7 @@
   "scripts": {
     "ng": "ng",
     "start": "node server.js",
+    "start_local": "ng serve --port 4400 --open",
     "build": "ng build --prod",
     "watch": "ng build --watch --configuration development",
     "test": "ng test"
